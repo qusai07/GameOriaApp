@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Api", "GameOria.Api\GameOria.Api.csproj", "{45EBA304-734B-4417-B141-87DB8432D58C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Application", "Gameoria.Application\GameOria.Application.csproj", "{E50303F8-9FD3-47A9-A8E5-DC424ABAA21F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Domains", "Gameoria.Domains\GameOria.Domains.csproj", "{23DCB3A5-51ED-4EEA-9A1F-2D0E73013BB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Infrastructure", "Gameoria.Infrastructure\GameOria.Infrastructure.csproj", "{4A14D184-26B0-46B8-8F28-C4EB3A262C0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45EBA304-734B-4417-B141-87DB8432D58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EBA304-734B-4417-B141-87DB8432D58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EBA304-734B-4417-B141-87DB8432D58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45EBA304-734B-4417-B141-87DB8432D58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E50303F8-9FD3-47A9-A8E5-DC424ABAA21F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E50303F8-9FD3-47A9-A8E5-DC424ABAA21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E50303F8-9FD3-47A9-A8E5-DC424ABAA21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E50303F8-9FD3-47A9-A8E5-DC424ABAA21F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23DCB3A5-51ED-4EEA-9A1F-2D0E73013BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23DCB3A5-51ED-4EEA-9A1F-2D0E73013BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23DCB3A5-51ED-4EEA-9A1F-2D0E73013BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23DCB3A5-51ED-4EEA-9A1F-2D0E73013BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A14D184-26B0-46B8-8F28-C4EB3A262C0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A14D184-26B0-46B8-8F28-C4EB3A262C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A14D184-26B0-46B8-8F28-C4EB3A262C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A14D184-26B0-46B8-8F28-C4EB3A262C0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4155698-E173-4973-A676-0C8DC6742B2D}
+	EndGlobalSection
+EndGlobal
