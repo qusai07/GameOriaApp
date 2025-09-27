@@ -1,8 +1,9 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Enums;
-using Gameoria.Domains.ValueObjects;
+﻿using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Identity;
+using GameOria.Domains.Enums;
+using GameOria.Domains.ValueObjects;
 
-namespace Gameoria.Domains.Entities.Orders
+namespace GameOria.Domains.Entities.Orders
 {
     public class Order : BaseAuditableEntity
     {
@@ -13,7 +14,7 @@ namespace Gameoria.Domains.Entities.Orders
         public Money TotalAmount { get; private set; }
 
         // Navigation properties
-        public virtual User.User User { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
         public virtual ICollection<OrderItem> Items { get; private set; } = new List<OrderItem>();
         public virtual ICollection<OrderCode> Codes { get; private set; } = new List<OrderCode>();
 

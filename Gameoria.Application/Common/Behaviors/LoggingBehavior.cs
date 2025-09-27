@@ -1,4 +1,4 @@
-﻿using Gameoria.Application.Common.Interfaces;
+﻿using GameOria.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Diagnostics;
 //LoggingBehavior: لتسجيل العمليات
 
 
-namespace Gameoria.Application.Common.Behaviors
+namespace GameOria.Application.Common.Behaviors
 {
     public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : notnull
@@ -32,7 +32,7 @@ namespace Gameoria.Application.Common.Behaviors
             var utcNow = _dateTime.UtcNow;
 
             _logger.LogInformation(
-                "Gameoria Request: {RequestName} {@UserId} {@Request} {@UtcNow}",
+                "GameOria Request: {RequestName} {@UserId} {@Request} {@UtcNow}",
                 requestName, userId, request, utcNow);
 
             var stopwatch = Stopwatch.StartNew();
@@ -40,7 +40,7 @@ namespace Gameoria.Application.Common.Behaviors
             stopwatch.Stop();
 
             _logger.LogInformation(
-                "Gameoria Response: {RequestName} {@UserId} took {ElapsedMilliseconds}ms {@Response}",
+                "GameOria Response: {RequestName} {@UserId} took {ElapsedMilliseconds}ms {@Response}",
                 requestName, userId, stopwatch.ElapsedMilliseconds, response);
 
             return response;

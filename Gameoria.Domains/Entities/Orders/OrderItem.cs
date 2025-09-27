@@ -1,16 +1,12 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Cards;
-using Gameoria.Domains.Entities.Games;
-using Gameoria.Domains.Enums;
-using Gameoria.Domains.Events.Orders;
-using Gameoria.Domains.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Cards;
+using GameOria.Domains.Entities.Games;
+using GameOria.Domains.Enums;
+using GameOria.Domains.ValueObjects;
 
-namespace Gameoria.Domains.Entities.Orders
+
+namespace GameOria.Domains.Entities.Orders
 {
     public class OrderItem : BaseAuditableEntity
     {

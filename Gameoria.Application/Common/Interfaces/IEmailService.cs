@@ -1,6 +1,6 @@
 ﻿//IEmailService: لإرسال رسائل البريد الإلكتروني
 
-namespace Gameoria.Application.Common.Interfaces
+namespace GameOria.Application.Common.Interfaces
 {
     public interface IEmailService
     {

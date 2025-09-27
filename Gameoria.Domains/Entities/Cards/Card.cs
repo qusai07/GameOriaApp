@@ -1,13 +1,8 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Stores;
-using Gameoria.Domains.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gameoria.Domains.Entities.Cards
+﻿
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Stores;
+using GameOria.Domains.ValueObjects;
+namespace GameOria.Domains.Entities.Cards
 {
     public class Card : BaseAuditableEntity
     {

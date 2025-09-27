@@ -1,19 +1,16 @@
-﻿using Gameoria.Domains.Entities.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOria.Domains.Entities.Identity;
 
-namespace Gameoria.Domains.Interfaces
+using System.Linq.Expressions;
+
+
+namespace GameOria.Domains.Interfaces
 {
     public interface IUserRepository 
     {
-        Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
-        Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<ApplicationUser?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ApplicationUser>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<ApplicationUser?> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ApplicationUser>> FindAsync(Expression<Func<ApplicationUser, bool>> predicate, CancellationToken cancellationToken = default);
 
         // User Profile Management
         Task<bool> UpdateUserProfileAsync(
@@ -35,15 +32,15 @@ namespace Gameoria.Domains.Interfaces
         // Query Helpers
         Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
         Task<bool> IsEmailUniqueAsync(string email, int? excludeUserId = null, CancellationToken cancellationToken = default);
-        Task<int> CountAsync(Expression<Func<User, bool>>? predicate = null, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(Expression<Func<ApplicationUser, bool>>? predicate = null, CancellationToken cancellationToken = default);
 
         // Audit Information
-        Task<IEnumerable<User>> GetRecentlyCreatedUsersAsync(int count, CancellationToken cancellationToken = default);
-        Task<IEnumerable<User>> GetRecentlyModifiedUsersAsync(int count, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ApplicationUser>> GetRecentlyCreatedUsersAsync(int count, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ApplicationUser>> GetRecentlyModifiedUsersAsync(int count, CancellationToken cancellationToken = default);
 
         // Basic Operations
-        Task<User> AddAsync(User user, CancellationToken cancellationToken = default);
-        Task UpdateAsync(User user, CancellationToken cancellationToken = default);
+        Task<ApplicationUser> AddAsync(ApplicationUser user, CancellationToken cancellationToken = default);
+        Task UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = default);
         Task DeleteAsync(int userId, CancellationToken cancellationToken = default);
     }
     }

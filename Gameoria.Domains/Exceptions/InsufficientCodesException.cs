@@ -1,11 +1,7 @@
-﻿using Gameoria.Domains.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOria.Domains.Enums;
 
-namespace Gameoria.Domains.Exceptions
+
+namespace GameOria.Domains.Exceptions
 {
     public class InsufficientCodesException : DomainException
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gameoria.Application.Features.Cards.Common
+namespace GameOria.Application.Features.Cards.Common
 {
     internal class CardDtos
     {

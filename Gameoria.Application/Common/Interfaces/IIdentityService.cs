@@ -1,8 +1,9 @@
 ﻿//IIdentityService: للتعامل مع الهوية والصلاحيات
 
-using Gameoria.Application.Common.Models;
 
-namespace Gameoria.Application.Common.Interfaces
+using GameOria.Application.Common.Models;
+
+namespace GameOria.Application.Common.Interfaces
 {
     public interface IIdentityService
     {

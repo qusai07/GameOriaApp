@@ -1,11 +1,5 @@
-﻿using Gameoria.Domains.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gameoria.Domains.Exceptions;
-namespace Gameoria.Domains.ValueObjects
+﻿
+namespace GameOria.Domains.ValueObjects
 {
     public class Rating : IEquatable<Rating>
     {

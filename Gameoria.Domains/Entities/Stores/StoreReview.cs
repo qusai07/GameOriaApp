@@ -1,13 +1,7 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Cards;
-using Gameoria.Domains.Entities.Games;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Identity;
 
-namespace Gameoria.Domains.Entities.Stores
+namespace GameOria.Domains.Entities.Stores
 {
     public class StoreReview : BaseAuditableEntity
     {
@@ -23,7 +17,7 @@ namespace Gameoria.Domains.Entities.Stores
 
         // Navigation Properties
         public virtual Store Store { get; set; }
-        public virtual User.User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         // Moderation
         public bool IsApproved { get; set; }

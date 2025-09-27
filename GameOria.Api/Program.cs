@@ -1,46 +1,28 @@
-var builder = WebApplication.CreateBuilder(args);
+using GameOria.Api.StartUp;
+using GameOria.Infrastructure.Data;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCorsPolicies();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerDocumentation();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddApplicationServices();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-// Configure Kestrel to use development certificates
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpClient("UnsafeHttpClient")
-         .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-         {
-             ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
-         });
-}
-
 // Add authentication and authorization services
-builder.Services.AddAuthentication()
-    .AddCookie();
-
+builder.Services.AddAuthentication().AddCookie();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+//DatabaseInitializer.InitializeDatabase(app.Services);
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-else
-{
-    app.UseDeveloperExceptionPage();
-}
-
+app.UseGlobalMiddlewares();
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Games;
+﻿
 
-namespace Gameoria.Domains.Events.Games
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Games;
+
+namespace GameOria.Domains.Events.Games
 {
     public class GameCreatedEvent : BaseEntity
     {

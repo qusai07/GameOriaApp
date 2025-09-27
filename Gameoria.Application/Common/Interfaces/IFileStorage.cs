@@ -1,6 +1,6 @@
 ﻿//IFileStorage: للتعامل مع تخزين الملفات
 
-namespace Gameoria.Application.Common.Interfaces
+namespace GameOria.Application.Common.Interfaces
 {
     public interface IFileStorage
     {

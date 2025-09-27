@@ -1,81 +1,82 @@
-﻿// CreateGameCommandHandler.cs
-using Gameoria.Application.Common.Interfaces;
-using Gameoria.Application.Common.Models;
-using Gameoria.Domains.Entities.Games;
-using Gameoria.Domains.Events.Games;
-using Gameoria.Domains.ValueObjects;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿//// CreateGameCommandHandler.cs
 
-namespace Gameoria.Application.Features.Games.Commands.CreateGame;
+//using GameOria.Application.Common.Interfaces;
+//using GameOria.Application.Common.Models;
+//using GameOria.Domains.Entities.Games;
+//using GameOria.Domains.Events.Games;
+//using GameOria.Domains.ValueObjects;
+//using MediatR;
+//using Microsoft.EntityFrameworkCore;
 
-public class CreateGameCommandHandler : IRequestHandler<CreateGameCommand, Result<Guid>>
-{
-    private readonly IApplicationDbContext _context;
-    private readonly ICurrentUserService _currentUserService;
+//namespace GameOria.Application.Features.Games.Commands.CreateGame;
 
-    public CreateGameCommandHandler(
-        IApplicationDbContext context,
-        ICurrentUserService currentUserService)
-    {
-        _context = context;
-        _currentUserService = currentUserService;
-    }
+//public class CreateGameCommandHandler : IRequestHandler<CreateGameCommand, Result<Guid>>
+//{
+//    private readonly IApplicationDbContext _context;
+//    private readonly ICurrentUserService _currentUserService;
 
-    public async Task<Result<Guid>> Handle(CreateGameCommand request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            // Verify store ownership
-            var store = await _context.Stores
-                .FirstOrDefaultAsync(s => s.Id == request.StoreId && s.OwnerId == _currentUserService.UserId, cancellationToken);
+//    public CreateGameCommandHandler(
+//        IApplicationDbContext context,
+//        ICurrentUserService currentUserService)
+//    {
+//        _context = context;
+//        _currentUserService = currentUserService;
+//    }
 
-            if (store == null)
-                return Result<Guid>.Failure(new[] { "You don't have permission to add games to this store" });
+//    //public async Task<Result<Guid>> Handle(CreateGameCommand request, CancellationToken cancellationToken)
+//    //{
+//    //    try
+//    //    {
+//    //        // Verify store ownership
+//    //        var store = await _context.Stores
+//    //            .FirstOrDefaultAsync(s => s.Id == request.StoreId && s.OwnerId == _currentUserService.UserId, cancellationToken);
 
-            var game = new Game(
-                request.Title,
-                request.Description,
-                new Money(request.Price),
-                request.CoverImageUrl,
-                request.ReleaseDate,
-                request.StoreId
-            );
+//    //        if (store == null)
+//    //            return Result<Guid>.Failure(new[] { "You don't have permission to add games to this store" });
 
-            // Add categories
-            foreach (var categoryId in request.CategoryIds)
-            {
-                game.Categories.Add(new GameCategory(game.Id, categoryId));
-            }
+//    //        var game = new Game(
+//    //            request.Title,
+//    //            request.Description,
+//    //            new Money(request.Price),
+//    //            request.CoverImageUrl,
+//    //            request.ReleaseDate,
+//    //            request.StoreId
+//    //        );
 
-            // Add images
-            foreach (var imageDto in request.Images)
-            {
-                game.Images.Add(new GameImage(
-                    imageDto.Url,
-                    imageDto.AltText,
-                    imageDto.DisplayOrder,
-                    game.Id
-                ));
-            }
+//    //        //// Add categories
+//    //        //foreach (var categoryId in request.CategoryIds)
+//    //        //{
+//    //        //    game.Categories.Add(new GameCategory(game.Id, categoryId));
+//    //        //}
 
-            if (!string.IsNullOrEmpty(request.TrailerUrl))
-            {
-                game.TrailerUrl = request.TrailerUrl;
-            }
+//    //        //// Add images
+//    //        //foreach (var imageDto in request.Images)
+//    //        //{
+//    //        //    game.Images.Add(new GameImage(
+//    //        //        imageDto.Url,
+//    //        //        imageDto.AltText,
+//    //        //        imageDto.DisplayOrder,
+//    //        //        game.Id
+//    //        //    ));
+//    //        //}
 
-            _context.Games.Add(game);
+//    //        if (!string.IsNullOrEmpty(request.TrailerUrl))
+//    //        {
+//    //            game.TrailerUrl = request.TrailerUrl;
+//    //        }
 
-            await _context.SaveChangesAsync(cancellationToken);
+//    //        _context.Games.Add(game);
 
-            // Add domain event
-            game.AddDomainEvent(new GameCreatedEvent(game));
+//    //        await _context.SaveChangesAsync(cancellationToken);
 
-            return Result<Guid>.Success(game.Id);
-        }
-        catch (Exception ex)
-        {
-            return Result<Guid>.Failure(new[] { $"Error creating game: {ex.Message}" });
-        }
-    }
-}
+//    //        // Add domain event
+//    //        game.AddDomainEvent(new GameCreatedEvent(game));
+
+//    //        return Result<Guid>.Success(game.Id);
+//    //    }
+//    //    catch (Exception ex)
+//    //    {
+//    //        return Result<Guid>.Failure(new[] { $"Error creating game: {ex.Message}" });
+//    //    }
+//    //}
+//}

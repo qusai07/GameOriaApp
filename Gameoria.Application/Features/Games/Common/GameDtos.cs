@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gameoria.Application.Features.Games.Common
+namespace GameOria.Application.Features.Games.Common
 {
     public record GameDto
     {

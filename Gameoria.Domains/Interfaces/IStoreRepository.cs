@@ -1,11 +1,8 @@
-﻿using Gameoria.Domains.Entities.Stores;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace Gameoria.Domains.Interfaces
+using GameOria.Domains.Entities.Stores;
+
+namespace GameOria.Domains.Interfaces
 {
     public interface IStoreRepository : IRepository<Store>
     {

@@ -1,6 +1,6 @@
 ﻿//ICurrentUserService: للحصول على معلومات المستخدم الحالي
 
-namespace Gameoria.Application.Common.Interfaces
+namespace GameOria.Application.Common.Interfaces
 {
     public interface ICurrentUserService
     {

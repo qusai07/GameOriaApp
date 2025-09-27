@@ -1,12 +1,7 @@
-﻿using Gameoria.Application.Common.Models;
-using Gameoria.Domains.Enums;
+﻿
+using GameOria.Application.Common.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-namespace Gameoria.Application.Features.Games.Commands.CreateGame;
+namespace GameOria.Application.Features.Games.Commands.CreateGame;
 
 public record CreateGameCommand : IRequest<Result<Guid>>
 {

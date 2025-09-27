@@ -1,12 +1,9 @@
-﻿using Gameoria.Domains.Entities.Orders;
-using Gameoria.Domains.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace Gameoria.Domains.Interfaces
+using GameOria.Domains.Entities.Orders;
+using GameOria.Domains.Enums;
+
+namespace GameOria.Domains.Interfaces
 {
     public interface IOrderRepository : IRepository<Order>
     {

@@ -1,6 +1,6 @@
 ﻿//BadRequestException: للطلبات غير الصحيحة
 
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class BadRequestException : Exception
     {

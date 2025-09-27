@@ -1,11 +1,8 @@
-﻿using Gameoria.Domains.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Identity;
 
-namespace Gameoria.Domains.Entities.Stores
+
+namespace GameOria.Domains.Entities.Stores
 {
     public class StoreOwner : BaseAuditableEntity
     {
@@ -43,7 +40,7 @@ namespace Gameoria.Domains.Entities.Stores
         public string SwiftCode { get; set; } = string.Empty;
 
         // Navigation Properties
-        public virtual User.User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public virtual Store Store { get; set; }
 
         // Agreement Information

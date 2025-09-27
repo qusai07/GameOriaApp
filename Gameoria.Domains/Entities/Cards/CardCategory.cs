@@ -1,7 +1,8 @@
-﻿using Gameoria.Domains.Common;
+﻿
 
+using GameOria.Domains.Common;
 
-namespace Gameoria.Domains.Entities.Cards
+namespace GameOria.Domains.Entities.Cards
 {
     public class CardCategory : BaseAuditableEntity
     {

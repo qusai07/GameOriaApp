@@ -1,6 +1,6 @@
 ﻿//IDateTime: للتعامل مع التواريخ والأوقات
 
-namespace Gameoria.Application.Common.Interfaces
+namespace GameOria.Application.Common.Interfaces
 {
     public interface IDateTime
     {

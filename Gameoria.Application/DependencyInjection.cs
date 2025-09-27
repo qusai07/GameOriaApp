@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using Gameoria.Application.Common.Behaviors;
+using GameOria.Application.Common.Behaviors;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 
-namespace Gameoria.Application
+namespace GameOria.Application
 {
     public static class DependencyInjection
     {

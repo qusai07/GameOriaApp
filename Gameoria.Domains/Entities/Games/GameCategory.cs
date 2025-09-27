@@ -1,11 +1,6 @@
-﻿using Gameoria.Domains.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOria.Domains.Common;
 
-namespace Gameoria.Domains.Entities.Games
+namespace GameOria.Domains.Entities.Games
 {
     public class GameCategory : BaseAuditableEntity
     {

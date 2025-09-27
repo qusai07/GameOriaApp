@@ -1,12 +1,9 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Cards;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace Gameoria.Domains.Events.Cards
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Cards;
+
+namespace GameOria.Domains.Events.Cards
 {
     public class CardUpdatedEvent : BaseEntity
     {

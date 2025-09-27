@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gameoria.Domains.ValueObjects
+namespace GameOria.Domains.ValueObjects
 {
     public class Code : IEquatable<Code>
     {

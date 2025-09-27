@@ -1,6 +1,6 @@
 ﻿//NotFoundException: عندما لا يتم العثور على كيان
 
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class NotFoundException : Exception
     {

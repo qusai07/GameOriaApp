@@ -1,6 +1,6 @@
 ﻿//ForbiddenAccessException: عندما لا يملك المستخدم الصلاحيات المطلوبة
 
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class ForbiddenAccessException : Exception
     {

@@ -1,12 +1,9 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Identity;
 
-namespace Gameoria.Domains.Entities.Games
+
+namespace GameOria.Domains.Entities.Games
 {
     public class GameReview : BaseAuditableEntity
     {
@@ -21,7 +18,7 @@ namespace Gameoria.Domains.Entities.Games
 
         // Navigation properties
         public virtual Game Game { get; set; }
-        public virtual User.User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         // Moderation
         public bool IsApproved { get; set; }

@@ -2,7 +2,7 @@
 
 //ValidationException: للتعامل مع أخطاء التحقق من صحة البيانات
 
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class ValidationException : Exception
     {

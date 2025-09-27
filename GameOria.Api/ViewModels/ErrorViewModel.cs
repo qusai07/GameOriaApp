@@ -1,4 +1,4 @@
-namespace GameOria.Api.Models
+namespace GameOria.Api.ViewModels
 {
     public class ErrorViewModel
     {

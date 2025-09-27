@@ -1,6 +1,6 @@
 ﻿
 //DuplicateEntityException: عند محاولة إنشاء كيان موجود مسبقاً
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class DuplicateEntityException : Exception
     {

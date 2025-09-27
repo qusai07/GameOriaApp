@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Orders;
-using Gameoria.Domains.ValueObjects;
+﻿
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Orders;
+using GameOria.Domains.ValueObjects;
 
 
-namespace Gameoria.Domains.Events.Orders
+namespace GameOria.Domains.Events.Orders
 {
     public class OrderCreatedEvent : BaseEntity
     {

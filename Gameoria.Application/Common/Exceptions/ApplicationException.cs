@@ -1,6 +1,6 @@
 ﻿//ApplicationException: للأخطاء العامة في التطبيق
 
-namespace Gameoria.Application.Common.Exceptions
+namespace GameOria.Application.Common.Exceptions
 {
     public class ApplicationException : Exception
     {

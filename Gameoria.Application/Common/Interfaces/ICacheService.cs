@@ -1,6 +1,6 @@
 ﻿//ICacheService: للتعامل مع التخزين المؤقت
 
-namespace Gameoria.Application.Common.Interfaces
+namespace GameOria.Application.Common.Interfaces
 {
     public interface ICacheService
     {

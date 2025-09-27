@@ -1,4 +1,4 @@
-using GameOria.Api.Models;
+using GameOria.Api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

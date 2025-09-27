@@ -1,13 +1,9 @@
 ﻿using FluentValidation;
-using Gameoria.Application.Common.Interfaces;
-using Gameoria.Application.Common.Models;
-using Gameoria.Domains.Entities.Games;
-using Gameoria.Domains.ValueObjects;
-using MediatR;
+using GameOria.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Gameoria.Application.Features.Games.Commands.CreateGame;
+namespace GameOria.Application.Features.Games.Commands.CreateGame;
 
 public class CreateGameCommandValidator : AbstractValidator<CreateGameCommand>
 {
@@ -40,15 +36,15 @@ public class CreateGameCommandValidator : AbstractValidator<CreateGameCommand>
         RuleFor(v => v.ReleaseDate)
             .NotEmpty().WithMessage("Release date is required");
 
-        RuleFor(v => v.StoreId)
-            .MustAsync(async (id, cancellation) => await context.Stores.AnyAsync(s => s.Id == id))
-            .WithMessage("Store does not exist");
+        //RuleFor(v => v.StoreId)
+        //    .MustAsync(async (id, cancellation) => await context.Stores.AnyAsync(s => s.Id == id))
+        //    .WithMessage("Store does not exist");
 
-        RuleFor(v => v.CategoryIds)
-            .NotEmpty().WithMessage("At least one category must be selected")
-            .MustAsync(async (ids, cancellation) =>
-                await context.Category.CountAsync(c => ids.Contains(c.Id)) == ids.Count)
-            .WithMessage("One or more selected categories do not exist");
+        //RuleFor(v => v.CategoryIds)
+        //    .NotEmpty().WithMessage("At least one category must be selected")
+        //    .MustAsync(async (ids, cancellation) =>
+        //        await context.Category.CountAsync(c => ids.Contains(c.Id)) == ids.Count)
+        //    .WithMessage("One or more selected categories do not exist");
 
         RuleForEach(v => v.Images)
             .ChildRules(image =>

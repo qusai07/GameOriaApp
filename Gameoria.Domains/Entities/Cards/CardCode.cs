@@ -1,12 +1,9 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Entities.Orders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace Gameoria.Domains.Entities.Cards
+using GameOria.Domains.Common;
+using GameOria.Domains.Entities.Orders;
+
+namespace GameOria.Domains.Entities.Cards
 {
     public class CardCode : BaseAuditableEntity
     {

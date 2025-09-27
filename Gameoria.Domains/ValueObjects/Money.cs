@@ -1,6 +1,5 @@
-﻿using Gameoria.Domains.Common;
-
-namespace Gameoria.Domains.ValueObjects
+﻿
+namespace GameOria.Domains.ValueObjects
 {
     public class Money : IEquatable<Money>
     {

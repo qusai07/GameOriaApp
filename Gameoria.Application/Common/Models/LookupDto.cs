@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gameoria.Application.Common.Models
+namespace GameOria.Application.Common.Models
 {
     public class LookupDto
     {

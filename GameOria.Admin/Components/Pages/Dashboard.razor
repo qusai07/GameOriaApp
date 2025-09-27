@@ -1,0 +1,64 @@
+﻿@page "/dashboard"
+
+<h3 class="mb-4">🌟 Admin Dashboard</h3>
+
+<div class="row g-4">
+    <!-- Card Example -->
+    <div class="col-md-3">
+        <div class="card text-white bg-primary shadow-lg border-0 rounded-3 p-3 hover-scale">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Total Organizers</h6>
+                    <h2>15</h2>
+                </div>
+                <i class="bi bi-shop fs-1"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-success shadow-lg border-0 rounded-3 p-3 hover-scale">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Total Customers</h6>
+                    <h2>750</h2>
+                </div>
+                <i class="bi bi-people fs-1"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-warning shadow-lg border-0 rounded-3 p-3 hover-scale">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Active Events</h6>
+                    <h2>24</h2>
+                </div>
+                <i class="bi bi-calendar-event fs-1"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-white bg-danger shadow-lg border-0 rounded-3 p-3 hover-scale">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Pending Approvals</h6>
+                    <h2>7</h2>
+                </div>
+                <i class="bi bi-clock fs-1"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS for hover effect -->
+<style>
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+</style>

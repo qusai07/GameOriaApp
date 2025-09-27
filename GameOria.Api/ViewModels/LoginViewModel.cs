@@ -2,7 +2,7 @@
 
 namespace GameOria.Api.ViewModels
 {
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required]
 

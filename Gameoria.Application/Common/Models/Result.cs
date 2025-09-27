@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 // Common/Models/Result.cs
-namespace Gameoria.Application.Common.Models;
+namespace GameOria.Application.Common.Models;
 
 public class Result
 {

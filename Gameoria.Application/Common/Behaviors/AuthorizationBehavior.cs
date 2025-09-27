@@ -1,5 +1,6 @@
-﻿using Gameoria.Application.Common.Exceptions;
-using Gameoria.Application.Common.Interfaces;
+﻿
+using GameOria.Application.Common.Exceptions;
+using GameOria.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
@@ -7,7 +8,7 @@ using System.Reflection;
 
 //AuthorizationBehavior: للتحقق من الصلاحيات
 
-namespace Gameoria.Application.Common.Behaviors
+namespace GameOria.Application.Common.Behaviors
 {
     public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
      where TRequest : notnull

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gameoria.Domains.Exceptions
+namespace GameOria.Domains.Exceptions
 {
     public abstract class DomainException : Exception
     {

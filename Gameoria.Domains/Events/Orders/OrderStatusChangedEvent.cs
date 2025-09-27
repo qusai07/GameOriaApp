@@ -1,12 +1,8 @@
-﻿using Gameoria.Domains.Common;
-using Gameoria.Domains.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GameOria.Domains.Common;
+using GameOria.Domains.Enums;
 
-namespace Gameoria.Domains.Events.Orders
+namespace GameOria.Domains.Events.Orders
 {
     public class OrderStatusChangedEvent : BaseEntity
     {
