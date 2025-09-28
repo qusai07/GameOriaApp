@@ -1,11 +1,17 @@
 using GameOria.Admin.Components;
+using GameOria.Admin.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5001/") });
+builder.Services.AddHttpClient("GameOriaApi", client =>
+{
+    client.BaseAddress = new Uri("http://192.168.70.149:7075/GameOria/");
+});
+
+builder.Services.AddScoped<APIService>();
 
 var app = builder.Build();
 

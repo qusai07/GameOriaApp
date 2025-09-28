@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Admin", "GameOria.Admin\GameOria.Admin.csproj", "{43E8B624-F8D5-459C-9E86-34D5B2C3E592}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Shared", "GameOria.Shared\GameOria.Shared.csproj", "{DE7B658E-E764-4F10-BB93-C54F0CBFA3A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOria.Web", "GameOria.Web\GameOria.Web.csproj", "{D76483BB-719E-4A50-982A-23F416C04016}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{43E8B624-F8D5-459C-9E86-34D5B2C3E592}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43E8B624-F8D5-459C-9E86-34D5B2C3E592}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43E8B624-F8D5-459C-9E86-34D5B2C3E592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7B658E-E764-4F10-BB93-C54F0CBFA3A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7B658E-E764-4F10-BB93-C54F0CBFA3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7B658E-E764-4F10-BB93-C54F0CBFA3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7B658E-E764-4F10-BB93-C54F0CBFA3A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76483BB-719E-4A50-982A-23F416C04016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76483BB-719E-4A50-982A-23F416C04016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76483BB-719E-4A50-982A-23F416C04016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76483BB-719E-4A50-982A-23F416C04016}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

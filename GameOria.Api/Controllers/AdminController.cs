@@ -1,4 +1,5 @@
-﻿using GameOria.Infrastructure.Data;
+﻿using GameOria.Domains.Enums;
+using GameOria.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,12 +19,11 @@ namespace GameOria.Api.Controllers
         [HttpGet("get-All-Customers")]
         public async Task<IActionResult> GetAllCustomers()
         {
-            var users = await _context.ApplicationUsers
+            var customers = await _context.ApplicationUsers
+                .Where(u => u.Role == Roles.Customer)   
                 .Select(u => new
                 {
-                    u.ID,
                     u.FullName,
-                    u.UserName,
                     u.EmailAddress,
                     u.MobileNumber,
                     u.Role,
@@ -31,7 +31,7 @@ namespace GameOria.Api.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(users);
+            return Ok(customers);
         }
 
         [HttpPost("toggle-status/{id}")]

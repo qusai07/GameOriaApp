@@ -18,10 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gameoria.Application\GameOria.Application.csproj" />
     <ProjectReference Include="..\Gameoria.Infrastructure\GameOria.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Admin\" />
+    <ProjectReference Include="..\GameOria.Shared\GameOria.Shared.csproj" />
   </ItemGroup>
 
 </Project>

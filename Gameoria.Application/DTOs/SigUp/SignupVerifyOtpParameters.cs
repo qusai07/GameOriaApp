@@ -1,4 +1,4 @@
-﻿namespace GameOria.Api.DTO.SigUp
+﻿namespace GameOria.Application.DTOs.SigUp
 {
     public class SignupVerifyOtpParameters
     {

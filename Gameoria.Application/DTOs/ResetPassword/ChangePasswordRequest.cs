@@ -1,4 +1,4 @@
-﻿namespace GameOria.Api.DTO.ResetPassword
+﻿namespace GameOria.Application.DTOs.ResetPassword
 {
     public class ChangePasswordRequest
     {

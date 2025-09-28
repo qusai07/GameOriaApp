@@ -1,0 +1,62 @@
+﻿@model GameOria.Shared.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<section class="welcome-hero" style="background: url('../assets/images/welcome-hero/banner.jpg') no-repeat; min-height: 100vh; display: flex; align-items: center; justify-content: center; background-size: cover; padding: 0;">
+    <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="login-container" style="background: rgba(22, 28, 36, 0.8); backdrop-filter: blur(10px); padding: 50px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.5); width: 800px; margin: 80px;">
+            <div class="text-center mb-5">
+                <h2 class="text-white" style="font-size: 42px; font-weight: 600;">Your Profile</h2>
+                <p style="color: #87CEEB; font-size: 18px;">View or edit your account details</p>
+            </div>
+
+            <form asp-action="UpdateProfile" asp-controller="Authentication" method="post" style="max-width: 600px; margin: 0 auto;">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group position-relative mb-4">
+                    <input asp-for="UserName" class="form-control custom-input" placeholder="User Name" readonly />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group position-relative mb-4">
+                    <input asp-for="FullName" class="form-control custom-input" placeholder="Full Name" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group position-relative mb-4">
+                    <input asp-for="EmailAddress" type="email" class="form-control custom-input" placeholder="Email Address" />
+                    <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                </div>
+
+                <div class="form-group position-relative mb-4">
+                    <input asp-for="MobileNumber" class="form-control custom-input" placeholder="Mobile Number" />
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-outline-secondary">
+                    Update Profile
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    .custom-input:focus {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #87CEEB !important;
+        box-shadow: 0 0 20px rgba(135, 206, 235, 0.3) !important;
+        outline: none;
+    }
+
+    .custom-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .login-btn:hover {
+        background: #A52A2A !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(139, 0, 0, 0.4);
+    }
+</style>

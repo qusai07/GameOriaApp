@@ -1,6 +1,8 @@
-﻿using GameOria.Domains.Enums;
+﻿
 
-namespace GameOria.Api.DTO.SigUp
+using GameOria.Domains.Enums;
+
+namespace GameOria.Application.DTOs.SigUp
 {
     public class SignupParameters
     {

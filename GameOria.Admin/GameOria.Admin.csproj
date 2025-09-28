@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\" />
+    <Compile Remove="Pages\**" />
+    <Content Remove="Pages\**" />
+    <EmbeddedResource Remove="Pages\**" />
+    <None Remove="Pages\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Gameoria.Domains\GameOria.Domains.csproj" />
+    <ProjectReference Include="..\GameOria.Shared\GameOria.Shared.csproj" />
   </ItemGroup>
 
 </Project>

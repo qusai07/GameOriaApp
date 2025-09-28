@@ -1,0 +1,140 @@
+﻿@model GameOria.Shared.DTOs.SigUp.SignupParameters
+<div>
+    <section class="welcome-hero" style="background: url('../assets/images/welcome-hero/banner.jpg') no-repeat; min-height: 100vh; display: flex; align-items: center; justify-content: center; background-size: cover; padding: 0;">
+        <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="login-container" style="background: rgba(22, 28, 36, 0.8); backdrop-filter: blur(10px); padding: 50px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.5); width: 800px; margin: 140px;">
+                <div class="text-center mb-5">
+                    <h2 class="text-white" style="font-size: 42px; font-weight: 600;">Create Your Account</h2>
+                    <p style="color: #87CEEB; font-size: 18px;">Sign up for your GameOria account</p>
+                </div>
+
+                <form asp-action="SignUp" asp-controller="Authentication" method="post" style="max-width: 600px; margin: 0 auto;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="UserName" class="form-control custom-input" placeholder="Enter User Name"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="FullName" class="form-control custom-input" placeholder="Enter Full Name"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="EmailAddress" type="email" class="form-control custom-input" placeholder="Enter Email Address"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="MobileNumber" class="form-control custom-input" placeholder="Enter Mobile Number"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="Password" type="password" class="form-control custom-input" placeholder="Enter Password"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group position-relative mb-4">
+                        <input asp-for="Password" type="password" class="form-control custom-input" placeholder="Enter Confirm Password"
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 20px; border-radius: 8px; font-size: 18px;" />
+                        <i class="fa fa-user input-icon" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #87CEEB; font-size: 20px;"></i>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-block login-btn"
+                            style="background: #8B0000; color: white; padding: 18px; border: none; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; font-size: 18px; margin-bottom: auto;">
+                        SIGN UP
+                    </button>
+
+                    <div class="text-center mt-4">
+                        <p class="text-white" style="font-size: 16px;">
+                            Already have an account?
+                            <a asp-action="Login" asp-controller="Home" style="color: #87CEEB; font-weight: 600;">Login</a>
+                        </p>
+                    </div>
+                </form>
+
+                <!-- OTP Verification Modal -->
+                <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="background: rgba(22, 28, 36, 0.9); color: white; border-radius: 10px;">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="otpModalLabel">Verify Your Account</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="otpForm">
+                                    <div class="form-group mb-3">
+                                        <label for="otpInput" class="form-label">Enter OTP</label>
+                                        <input type="text" id="otpInput" name="otp" class="form-control" placeholder="Enter OTP"
+                                               style="background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255,255,255,0.2);" />
+                                    </div>
+                                    <button type="submit" class="btn btn-danger w-100">Verify</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<style>
+    .custom-input:focus {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #87CEEB !important;
+        box-shadow: 0 0 20px rgba(135, 206, 235, 0.3) !important;
+        outline: none;
+    }
+
+    .custom-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .login-btn:hover {
+        background: #A52A2A !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(139, 0, 0, 0.4);
+    }
+</style>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var showOtp = '@TempData["ShowOtpModal"]';
+            if (showOtp === 'True') {
+                var otpModal = new bootstrap.Modal(document.getElementById('otpModal'));
+                otpModal.show();
+            }
+
+            $("#otpForm").on("submit", function (e) {
+                e.preventDefault();
+                var otp = $("#otpInput").val();
+
+                $.ajax({
+                    url: '@Url.Action("VerifyOtp", "Authentication")',
+                    method: "POST",
+                    data: { otp: otp },
+                    success: function (res) {
+                        if (res.success) {
+                            alert("Account verified successfully!");
+                            window.location.href = '@Url.Action("Login", "Authentication")';
+                        } else {
+                            alert("Invalid OTP, please try again.");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

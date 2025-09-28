@@ -1,0 +1,20 @@
+﻿@page "/customers"
+@using GameOria.Domains.Entities.Identity
+@inject HttpClient Http
+
+<h3>Customers Management</h3>
+
+<TableUser Users="customers" OnEdit="EditCustomer" OnDelete="DeleteCustomer" OnToggleActive="ToggleCustomerActive" />
+
+@code {
+    private List<ApplicationUser> customers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await Http.GetFromJsonAsync<List<ApplicationUser>>("GameOria/get-All-Customers");
+    }
+
+    private void EditCustomer(ApplicationUser user) => Console.WriteLine($"Edit {user.FullName}");
+    private void DeleteCustomer(ApplicationUser user) => customers.Remove(user);
+    private void ToggleCustomerActive(ApplicationUser user) => user.IsActive = !user.IsActive;
+}

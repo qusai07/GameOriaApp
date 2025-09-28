@@ -1,4 +1,4 @@
-﻿namespace GameOria.Api.DTO.Login
+﻿namespace GameOria.Application.DTOs.Login
 {
     public class LoginParameters
     {

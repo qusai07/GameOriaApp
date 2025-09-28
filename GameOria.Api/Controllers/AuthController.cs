@@ -1,7 +1,7 @@
-﻿using GameOria.Api.DTO.Login;
-using GameOria.Api.DTO.ResetPassword;
-using GameOria.Api.DTO.SigUp;
-using GameOria.Api.DTO.UserInformation;
+﻿using GameOria.Application.DTOs.Login;
+using GameOria.Application.DTOs.ResetPassword;
+using GameOria.Application.DTOs.SigUp;
+using GameOria.Application.DTOs.UserInformation;
 using GameOria.Api.Helper.Service;
 using GameOria.Api.Repo.Interface;
 using GameOria.Domains.Entities.Identity;
@@ -13,6 +13,8 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace GameOria.Api.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : BaseController
     {
         private readonly IConfiguration _configuration;
@@ -127,6 +129,7 @@ namespace GameOria.Api.Controllers
         //        EmailAddress = user.EmailAddress
         //    });
         //}
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginParameters loginParameters)
         {
@@ -236,11 +239,11 @@ namespace GameOria.Api.Controllers
 
             return Ok(new
             {
-                user.ID,
                 user.FullName,
                 user.UserName,
                 user.EmailAddress,
-                user.IsActive
+                user.IsActive,
+                user.MobileNumber
             });
         }
 
@@ -257,18 +260,25 @@ namespace GameOria.Api.Controllers
             if (user == null)
                 return NotFound("UserNotFound");
 
-            // Check if email is already used by another user
             var isEmailTaken = await _dataService.GetQuery<ApplicationUser>()
                 .AnyAsync(u => u.EmailAddress == request.EmailAddress && u.ID != user.ID);
             if (isEmailTaken)
                 return BadRequest("EmailAlreadyInUse");
 
-            // Check if number is already used by another user
             var isNumberTaken = await _dataService.GetQuery<ApplicationUser>()
                 .AnyAsync(u => u.MobileNumber == request.MobileNumber && u.ID != user.ID);
             if (isNumberTaken)
                 return BadRequest("NumberAlreadyInUse");
+
+            var isUserNameTaken = await _dataService.GetQuery<ApplicationUser>()
+                .AnyAsync(u => u.UserName == request.UserName && u.ID != user.ID);
+            if (isUserNameTaken)
+                return BadRequest("UserNameAlreadyInUse");
+
+
             // Update data
+            user.FullName = request.FullName;
+            user.UserName = request.UserName;
             user.EmailAddress = request.EmailAddress;
             user.MobileNumber = request.MobileNumber;
 

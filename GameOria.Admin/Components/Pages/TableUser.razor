@@ -1,0 +1,66 @@
+﻿@page "/tableuser"
+@using GameOria.Admin.ViewModels
+@inject GameOria.Admin.Services.APIService APIService
+
+<div class="mb-3 d-flex justify-content-between">
+    <input type="text" class="form-control w-25" placeholder="Search Users..." @bind="searchTerm" />
+    <button class="btn btn-primary" @onclick="AddUser">+ Add New User</button>
+</div>
+
+<table class="table table-hover align-middle shadow-sm rounded-2">
+    <thead class="table-light">
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in filteredUsers)
+        {
+            <tr>
+                <td>@u.FullName</td>
+                <td>@u.EmailAddress</td>
+                <td>@u.MobileNumber</td>
+                <td>@u.Role</td>
+                <td>
+                    <input type="checkbox" checked="@u.IsActive" @onchange="() => ToggleActive(u)" />
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-info me-2" @onclick="() => EditUser(u)">Edit</button>
+                    <button class="btn btn-sm btn-danger" @onclick="() => DeleteUser(u)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<UserDto> users = new();
+    private string searchTerm = "";
+
+    private IEnumerable<UserDto> filteredUsers =>
+        users.Where(u =>
+            string.IsNullOrWhiteSpace(searchTerm) ||
+            u.FullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            u.EmailAddress.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+        );
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await APIService.GetAllUsersAsync();
+    }
+
+    private async Task ToggleActive(UserDto user)
+    {
+        await APIService.ToggleUserActiveAsync(user);
+        user.IsActive = !user.IsActive; // update UI locally
+    }
+
+    private void AddUser() => Console.WriteLine("Add new user clicked");
+    private void EditUser(UserDto user) => Console.WriteLine($"Edit {user.FullName}");
+    private void DeleteUser(UserDto user) => Console.WriteLine($"Delete {user.FullName}");
+}
