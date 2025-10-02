@@ -2,6 +2,7 @@ using GameOria.Web.Service.Handlers;
 using GameOria.Web.Service.Implementation;
 using GameOria.Web.Service.Interface;
 using System.Net.Http;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +18,18 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<AuthHeaderHandler>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddHttpClient<IAuthService, AuthService>(c =>
 {
-    c.BaseAddress = new Uri("http://192.168.70.149:7075/GameOria/api/Auth/");
+    c.BaseAddress = new Uri("http://172.20.10.14:7075/GameOria/api/Auth/");
 })
 .AddHttpMessageHandler<AuthHeaderHandler>();
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

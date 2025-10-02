@@ -45,11 +45,17 @@ namespace GameOria.Web.Service.Implementation
             return await _httpClient.PostAsJsonAsync("UpdateProfile" , request);
         }
 
-        public async Task<HttpResponseMessage> VerifyOtpAsync(string otp)
+        public async Task<HttpResponseMessage> VerifyOtpAsync(Guid id, string otp)
         {
-            var request = new { OtpCode = otp };
+            var request = new { Id = id, OtpCode = otp };
             return await _httpClient.PostAsJsonAsync("SignupVerifyOtp", request);
         }
+        public async Task<HttpResponseMessage> ResendOtpAsync(Guid id)
+        {
+            var request = new { Id = id};
+            return await _httpClient.PostAsJsonAsync("SignupResendOtp", request);
+        }
+
 
     }
 

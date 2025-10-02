@@ -1,53 +1,53 @@
-﻿using GameOria.Application.DTOs.Login;
+﻿using AutoMapper;
+using GameOria.Application.DTOs.Login;
 using GameOria.Shared.DTOs.SigUp;
+using GameOria.Shared.Request;
+using GameOria.Shared.Response;
 using GameOria.Shared.ViewModels;
 using GameOria.Web.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace GameOria.Web.Controllers
 {
     public class AuthenticationController : Controller
     {
         private readonly IAuthService _authService;
-        public AuthenticationController(IAuthService authService)
+        private readonly IMapper _mapper;
+        public AuthenticationController(IAuthService authService , IMapper mapper)
         {
             _authService = authService;
+            _mapper = mapper;
         }
-        [HttpGet]
         public IActionResult SignUp()
         {
-            return View("~/Views/Auth/SignUp.cshtml");
+            var model = new SignupViewModel();
+            return View("~/Views/Auth/SignUp.cshtml", model);
         }
+
         [HttpPost]
-        public async Task<IActionResult> SignUp(SignupParameters model)
-        {
+        public async Task<IActionResult> SignUp(SignupViewModel model)
+        {   
             if (!ModelState.IsValid)
                 return View(model);
 
-            var signupParams = new SignupParameters
-            {
-                FullName = model.FullName,
-                EmailAddress = model.EmailAddress,
-                MobileNumber = model.MobileNumber,
-                UserName = model.UserName,
-                Password = model.Password,
-                UserRole = Domains.Enums.Roles.Customer
-            };
-
-            var response = await _authService.SignUpAsync(signupParams);
+            var signupDto = _mapper.Map<SignupParameters>(model);
+            var response = await _authService.SignUpAsync(signupDto);
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["ShowOtpModal"] = true;
-                return View("~/Views/Auth/SignUp.cshtml", model);
+                var content = await response.Content.ReadAsStringAsync();
+                var signupResponse = JsonConvert.DeserializeObject<SignupResponse>(content);
+                return RedirectToAction("VerifyOTP", "Authentication", new { id = signupResponse.Id });
             }
             else
             {
                 var content = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", content);
-                return View(model);
+                ModelState.AddModelError("Error", content);
+                return View(model); 
             }
         }
+
 
         [HttpGet]
         public IActionResult Login()
@@ -97,21 +97,46 @@ namespace GameOria.Web.Controllers
 
             return RedirectToAction("Profile");
         }
+     
+        public IActionResult VerifyOtp(Guid Id)
+        {
+            var model = new VerifyOtpViewModel { Id = Id };
+            return View("~/Views/Auth/VerfiyOTP.cshtml",model);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyOtp(string otp)
+        public async Task<IActionResult> VerifyOtp(VerifyOtpViewModel model)
         {
-            var response = await _authService.VerifyOtpAsync(otp);
+            if (!ModelState.IsValid)
+                return View(model);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+            var result = await _authService.VerifyOtpAsync(model.Id, model.Otp);
+
+            if (result.IsSuccessStatusCode)
+                return RedirectToAction("Login", "Authentication");
+
+            ModelState.AddModelError("Otp", "Invalid OTP, please try again.");
+            return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> ResendOtp(ResendOtp model)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("VerifyOtp", new { id = model.Id });
+
+            var result = await _authService.ResendOtpAsync(model.Id);
+
+            if (result.IsSuccessStatusCode)
+            {
+                TempData["OtpMessage"] = "A new OTP has been sent to your email/phone.";
+                return RedirectToAction("VerifyOtp", new { id = model.Id });
+            }
+
+            TempData["OtpError"] = "Failed to resend OTP, please try again.";
+            return RedirectToAction("VerifyOtp", new { id = model.Id });
+        }
+
+
 
 
 

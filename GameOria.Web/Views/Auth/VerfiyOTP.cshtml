@@ -1,0 +1,43 @@
+﻿@model GameOria.Shared.ViewModels.VerifyOtpViewModel
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card bg-dark text-white shadow-lg border-0 rounded-4 p-4">
+                <div class="card-header text-center border-0 bg-transparent mb-3">
+                    <h3 class="fw-bold text-danger">🔐 Verify Your Account</h3>
+                    <p class="text-muted small mb-0">Enter the code we sent to your email or phone</p>
+                </div>
+
+                <div class="card-body">
+                    <form asp-action="VerifyOtp" asp-controller="Authentication" method="post">
+                        <div class="mb-4">
+                            <label asp-for="Otp" class="form-label fw-semibold">One-Time Password (OTP)</label>
+                            <input asp-for="Otp" id="otpInput"
+                                   class="form-control form-control-lg text-center fw-bold"
+                                   placeholder="••••••" maxlength="6" />
+                            <span asp-validation-for="Otp" class="text-danger small"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg w-100 shadow-sm rounded-pill">
+                            ✅ Verify
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <small class="text-muted d-block mb-1">Didn’t receive the code?</small>
+                        <form asp-action="ResendOtp" method="post">
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-link">Resend OTP</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

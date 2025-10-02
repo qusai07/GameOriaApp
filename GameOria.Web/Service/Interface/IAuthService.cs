@@ -12,7 +12,8 @@ namespace GameOria.Web.Service.Interface
         Task<HttpResponseMessage> LoginAsync(LoginParameters parameters);
         Task<ProfileViewModel?> GetProfileAsync();
         Task<HttpResponseMessage> UpdateProfileAsync(ProfileViewModel request);
-        Task<HttpResponseMessage> VerifyOtpAsync(string otp);
+        Task<HttpResponseMessage> VerifyOtpAsync(Guid id, string otp);
+        Task<HttpResponseMessage> ResendOtpAsync(Guid id);
 
 
     }

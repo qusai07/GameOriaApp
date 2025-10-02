@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using GameOria.Api.Response;
 
 namespace GameOria.Api.Controllers
 {
@@ -29,7 +30,7 @@ namespace GameOria.Api.Controllers
             _jwtHelper = jwtHelper;
         }
 
-
+        //APIResponse Done
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp([FromBody] SignupParameters signupParameters)
         {
@@ -65,27 +66,60 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while processing your request.",
+                    Errors = new List<string> { ex.Message }
+                });
             }
 
         }
+
+        //APIResponse Done
         [HttpPost("SignupResendOtp")]
         public async Task<IActionResult> SignupResendOtp([FromBody] SignupUserParameters signupUserParameters)
         {
-            var user = await GetUserByIdAsync(signupUserParameters.Id);
+            try
+            {
+                var user = await GetUserByIdAsync(signupUserParameters.Id);
 
-            if (user == null)
-                return BadRequest("UserNotFound");
+                if (user == null)
+                {
+                    return StatusCode(500,new ApiResponse
+                    {
+                        Success = false,
+                        Message = "UserNotFound"
+                    });
+                }
 
-            var otpTimeOut = _configuration.GetValue("OtpTimeOut", 2);// default 2 mins
-            if (DateTime.UtcNow - user.OtpDate < TimeSpan.FromMinutes(otpTimeOut))
-                return BadRequest("OtpAlreadySent");
+                var otpTimeOut = _configuration.GetValue("OtpTimeOut", 2); // default 2 mins
+                if (DateTime.UtcNow - user.OtpDate < TimeSpan.FromMinutes(otpTimeOut))
+                {
+                    return StatusCode(500, new ApiResponse
+                    {
+                        Success = false,
+                        Message = "OtpAlreadySent",
+                    });
+                }
 
-            user.OtpCode = OtpHelper.GenerateOtp(6);
-            user.OtpDate = DateTime.UtcNow;
-            await _dataService.SaveAsync();
-            return Ok($"[OTP] Sent to {user.MobileNumber}: {user.OtpCode}");
+                // Generate new OTP
+                user.OtpCode = OtpHelper.GenerateOtp(6);
+                user.OtpDate = DateTime.UtcNow;
+                await _dataService.SaveAsync();
+                return Ok(user.OtpCode);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while processing your request.",
+                    Errors = new List<string> { ex.Message }
+                });
+            }
         }
+
 
         [HttpPost("SignupVerifyOtp")]
         public async Task<IActionResult> SignupVerifyOtp([FromBody] SignupVerifyOtpParameters signupVerifyOtpParameters)

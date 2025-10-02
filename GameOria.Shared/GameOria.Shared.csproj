@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="DTOs\SigUp\SignupParameters.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Gameoria.Domains\GameOria.Domains.csproj" />
   </ItemGroup>
 
