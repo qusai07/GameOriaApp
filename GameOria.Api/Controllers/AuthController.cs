@@ -120,24 +120,38 @@ namespace GameOria.Api.Controllers
             }
         }
 
-
+        //APIResponse Done
         [HttpPost("SignupVerifyOtp")]
         public async Task<IActionResult> SignupVerifyOtp([FromBody] SignupVerifyOtpParameters signupVerifyOtpParameters)
         {
-            var user = await GetUserByIdAsync(signupVerifyOtpParameters.Id);
+            try
+            {
+                var user = await GetUserByIdAsync(signupVerifyOtpParameters.Id);
 
-            if (user == null) return BadRequest("UserNotFound");
+                if (user == null) return BadRequest("UserNotFound");
 
-            var otpTimeOut = _configuration.GetValue("OtpTimeOut", 2); // 2 mins
-            if (DateTime.UtcNow - user.OtpDate > TimeSpan.FromMinutes(otpTimeOut))
-                return BadRequest("OtpExpired");
+                var otpTimeOut = _configuration.GetValue("OtpTimeOut", 2); // 2 mins
+                if (DateTime.UtcNow - user.OtpDate > TimeSpan.FromMinutes(otpTimeOut))
+                    return BadRequest("OtpExpired");
 
-            if (user.OtpCode != signupVerifyOtpParameters.OtpCode)
-                return BadRequest("OtpNotMatched");
+                if (user.OtpCode != signupVerifyOtpParameters.OtpCode)
+                    return BadRequest("OtpNotMatched");
 
-            user.IsActive = true;
-            await _dataService.SaveAsync();
-            return Ok("AccountVerified");
+                user.IsActive = true;
+                await _dataService.SaveAsync();
+                return Ok("AccountVerified");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+           
         }
 
         //[HttpGet("CheckNationalNumber/{userId}")]
@@ -164,128 +178,194 @@ namespace GameOria.Api.Controllers
         //    });
         //}
 
+
+        //APIResponse Done
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginParameters loginParameters)
         {
-            var user = _dataService.GetQuery<ApplicationUser>()
-             .FirstOrDefault(x => x.UserName == loginParameters.UserNameOrEmail || x.EmailAddress == loginParameters.UserNameOrEmail);
+            try
+            {
+                var user = _dataService.GetQuery<ApplicationUser>()
+        .FirstOrDefault(x => x.UserName == loginParameters.UserNameOrEmail || x.EmailAddress == loginParameters.UserNameOrEmail);
 
 
-            if (user == null)
-                return BadRequest("UserNotFound");
+                if (user == null)
+                    return BadRequest("UserNotFound");
 
-            if (!user.IsActive)
-                return BadRequest("AccountNotActive");
+                if (!user.IsActive)
+                    return BadRequest("AccountNotActive");
 
-            var passwordCheck  = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginParameters.Password);
-            if (passwordCheck == PasswordVerificationResult.Failed)
-                return BadRequest("InvalidPassword");
+                var passwordCheck = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginParameters.Password);
+                if (passwordCheck == PasswordVerificationResult.Failed)
+                    return BadRequest("InvalidPassword");
 
 
-            var token = _jwtHelper.GenerateToken(user);
-            return Ok(token);
+                var token = _jwtHelper.GenerateToken(user);
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+
         }
 
         // Email Sender Class (SMTP + MailKit) we Need that
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-            var user =  _dataService.GetQuery<ApplicationUser>()
-                .FirstOrDefault(u => u.EmailAddress == request.Email);
-            if (user == null)
-                return BadRequest("UserNotFound");
-
-            var resetCode = new Random().Next(100000, 999999).ToString();
-
-            var resetRequest = new PasswordResetRequest
+            try
             {
-                UserId = user.ID,
-                ResetCode = resetCode,
-                ExpiryDate = DateTime.UtcNow.AddMinutes(15)
-            };
-            await _dataService.CreateAsync(resetRequest);
-            await _dataService.SaveAsync();
+                var user = _dataService.GetQuery<ApplicationUser>()
+              .FirstOrDefault(u => u.EmailAddress == request.Email);
+                if (user == null)
+                    return BadRequest("UserNotFound");
 
-            return Ok("Otp Sent");
+                var resetCode = new Random().Next(100000, 999999).ToString();
+
+                var resetRequest = new PasswordResetRequest
+                {
+                    UserId = user.ID,
+                    ResetCode = resetCode,
+                    ExpiryDate = DateTime.UtcNow.AddMinutes(15)
+                };
+                await _dataService.CreateAsync(resetRequest);
+                await _dataService.SaveAsync();
+
+                return Ok("Otp Sent");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
-            var user = await _dataService.GetQuery<ApplicationUser>()
-        .FirstOrDefaultAsync(u => u.EmailAddress == request.Email);
+            try
+            {
+                var user = await _dataService.GetQuery<ApplicationUser>()
+                .FirstOrDefaultAsync(u => u.EmailAddress == request.Email);
 
-            if (user == null)
-                return BadRequest("UserNotFound");
+                if (user == null)
+                    return BadRequest("UserNotFound");
 
-            var resetRequest = await _dataService.GetQuery<PasswordResetRequest>()
-        .FirstOrDefaultAsync(r => r.UserId == user.ID && r.ResetCode == request.ResetCode && !r.IsUsed);
+                var resetRequest = await _dataService.GetQuery<PasswordResetRequest>()
+                .FirstOrDefaultAsync(r => r.UserId == user.ID && r.ResetCode == request.ResetCode && !r.IsUsed);
 
-            if (resetRequest == null)
-                return BadRequest("InvalidResetCode");
+                if (resetRequest == null)
+                    return BadRequest("InvalidResetCode");
 
-            if (resetRequest.ExpiryDate < DateTime.UtcNow)
-                return BadRequest("ResetCodeExpired");
+                if (resetRequest.ExpiryDate < DateTime.UtcNow)
+                    return BadRequest("ResetCodeExpired");
 
-            user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+                user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
 
-            resetRequest.IsUsed = true;
+                resetRequest.IsUsed = true;
 
-            await _dataService.SaveAsync();
-
-            return Ok("PasswordResetSuccessful");
+                await _dataService.SaveAsync();
+                return Ok("PasswordResetSuccessful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            var userId = GetUserId();
-            if (userId == null)
-                return Unauthorized();
+            try
+            {
+                var userId = GetUserId();
+                if (userId == null)
+                    return Unauthorized();
 
-            var user = await _dataService.GetByIdAsync<ApplicationUser>(userId.Value);
-            if (user == null)
-                return NotFound("UserNotFound");
+                var user = await _dataService.GetByIdAsync<ApplicationUser>(userId.Value);
+                if (user == null)
+                    return NotFound("UserNotFound");
 
-            var passwordCheck = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
-            if (passwordCheck == PasswordVerificationResult.Failed)
-                return BadRequest("InvalidOldPassword");
+                var passwordCheck = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
+                if (passwordCheck == PasswordVerificationResult.Failed)
+                    return BadRequest("InvalidOldPassword");
 
-            user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
-            await _dataService.UpdateAsync(user);
-            await _dataService.SaveAsync();
-            return Ok("PasswordChangedSuccessfully");
+                user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+                await _dataService.UpdateAsync(user);
+                await _dataService.SaveAsync();
+                return Ok("PasswordChangedSuccessfully");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [Authorize]
         [HttpGet("GetProfile")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = GetUserId();
-            if (userId == null)
-                return Unauthorized();
-
-            var user = await _dataService.GetByIdAsync<ApplicationUser>(userId);
-
-            if (user == null)
-                return NotFound("UserNotFound");
-
-            return Ok(new
+            try
             {
-                user.FullName,
-                user.UserName,
-                user.EmailAddress,
-                user.IsActive,
-                user.MobileNumber
-            });
+                var userId = GetUserId();
+                if (userId == null)
+                    return Unauthorized();
+
+                var user = await _dataService.GetByIdAsync<ApplicationUser>(userId);
+
+                if (user == null)
+                    return NotFound("UserNotFound");
+
+                return Ok(new
+                {
+                    user.FullName,
+                    user.UserName,
+                    user.EmailAddress,
+                    user.IsActive,
+                    user.MobileNumber
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
         }
 
         [Authorize]
         [HttpPost("UpdateProfile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
         {
-            var userId = GetUserId();
+            try
+            {    
+                var userId = GetUserId();
             if (userId == null)
                 return Unauthorized();
 
@@ -320,6 +400,18 @@ namespace GameOria.Api.Controllers
             await _dataService.SaveAsync();
 
             return Ok("ProfileUpdatedSuccessfully");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+    
         }
 
         [Authorize]
