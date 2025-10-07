@@ -46,10 +46,15 @@
                         <i class="fas fa-cog me-2"></i>Settings
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-controller="Organizer" asp-action="BecomeOrganizer">
+                        <i class="fas fa-cog me-2"></i>Become A Partner
+                    </a>
+                </li>
             </ul>
             <ul class="nav flex-column mb-3">
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-controller="Home" asp-action="Logout">
+                    <a class="nav-link text-white" asp-controller="Authentication" asp-action="Logout" method="post" >
                         <i class="fas fa-sign-out-alt me-2"></i>Logout
                     </a>
                 </li>

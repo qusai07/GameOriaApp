@@ -1,4 +1,5 @@
 ﻿using GameOria.Admin.ViewModels;
+using GameOria.Shared.DTOs.Organizer;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -20,11 +21,19 @@ namespace GameOria.Admin.Services
 
         public async Task ToggleUserActiveAsync(UserDto user)
         {
-            // مثال request لتحديث حالة المستخدم
             var response = await _httpClient.PutAsJsonAsync($"ToggleActive/{user.EmailAddress}", user);
             response.EnsureSuccessStatusCode();
         }
 
-        // Add, Edit, Delete methods يمكن إضافتها بنفس الأسلوب
+        public async Task<List<OrganizerRequestDto>> GetAllOrganizerRequestsAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<OrganizerRequestDto>>("get-All-Organizers");
+        }
+        public async Task ApproveOrganizerAsync(string userId)
+        {
+            var response = await _httpClient.PutAsync($"approve/{userId}", null);
+            response.EnsureSuccessStatusCode();
+        }
+
     }
 }

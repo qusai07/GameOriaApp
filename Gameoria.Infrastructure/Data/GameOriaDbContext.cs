@@ -30,8 +30,19 @@ namespace GameOria.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            builder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.Entity<ApplicationUser>().ToTable("ApplicationUsers");
+            builder.Entity<OrganizerUser>().ToTable("OrganizerUsers");
+            builder.Entity<CustomerUser>().ToTable("CustomerUsers");
+
+
+            // تعليق هذا السطر يمنع تطبيق إعدادات
+            // ApplicationUser من الـ Configuration class
+            // استخدمناه هنا لتجنب تعارض الـ
+            // TPH/TPT
+            // بين ApplicationUser و subclasses
+            //builder.ApplyConfiguration(new ApplicationUserConfiguration());
         }
+
     }
 
 }

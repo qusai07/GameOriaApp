@@ -1,0 +1,62 @@
+﻿@page "/organizer-requests"
+@inject GameOria.Admin.Services.APIService APIService
+@using GameOria.Shared.DTOs.Organizer
+
+<div class="mb-3 d-flex justify-content-between">
+    <input type="text" class="form-control w-25" placeholder="Search Requests..." @bind="searchTerm" />
+</div>
+
+<table class="table table-hover align-middle shadow-sm rounded-2">
+    <thead class="table-light">
+        <tr>
+            <th>User</th>
+            <th>Store Name</th>
+            <th>Business Email</th>
+            <th>Identity Number</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in filteredRequests)
+        {
+            <tr>
+                <td>@r.UserFullName</td>
+                <td>@r.StoreName</td>
+                <td>@r.BusinessEmail</td>
+                <td>@r.IdentityNumber</td>
+                <td>@r.PhoneNumber</td>
+                <td>
+                    <input type="checkbox" checked="@r.IsApproved" disabled />
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-success" @onclick="() => ApproveRequest(r)">Approve</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<OrganizerRequestDto> requests = new();
+    private string searchTerm = "";
+
+    private IEnumerable<OrganizerRequestDto> filteredRequests =>
+        requests.Where(r =>
+            string.IsNullOrWhiteSpace(searchTerm) ||
+            r.UserFullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            r.StoreName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+        );
+
+    protected override async Task OnInitializedAsync()
+    {
+        requests = await APIService.GetAllOrganizerRequestsAsync();
+    }
+
+    private async Task ApproveRequest(OrganizerRequestDto request)
+    {
+        await APIService.ApproveOrganizerAsync(request.UserId);
+        request.IsApproved = true; 
+    }
+}

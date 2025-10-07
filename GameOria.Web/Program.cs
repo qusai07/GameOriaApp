@@ -25,7 +25,7 @@ builder.Services.AddControllersWithViews()
     });
 builder.Services.AddHttpClient<IAuthService, AuthService>(c =>
 {
-    c.BaseAddress = new Uri("http://172.20.10.14:7075/GameOria/api/Auth/");
+    c.BaseAddress = new Uri("http://localhost:7075/api/Auth/");
 })
 .AddHttpMessageHandler<AuthHeaderHandler>();
 

@@ -4,6 +4,7 @@ using GameOria.Shared.DTOs.SigUp;
 using GameOria.Shared.Request;
 using GameOria.Shared.Response;
 using GameOria.Shared.ViewModels;
+using GameOria.Web.Service.Handlers;
 using GameOria.Web.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -13,41 +14,40 @@ namespace GameOria.Web.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly AuthHeaderHandler _authHeaderHandler;
         private readonly IMapper _mapper;
-        public AuthenticationController(IAuthService authService , IMapper mapper)
+        public AuthenticationController(IAuthService authService , IMapper mapper, AuthHeaderHandler authHeaderHandler)
         {
             _authService = authService;
             _mapper = mapper;
+            _authHeaderHandler = authHeaderHandler;
         }
         public IActionResult SignUp()
         {
             var model = new SignupViewModel();
             return View("~/Views/Auth/SignUp.cshtml", model);
         }
-
         [HttpPost]
         public async Task<IActionResult> SignUp(SignupViewModel model)
-        {   
+        {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var signupDto = _mapper.Map<SignupParameters>(model);
-            var response = await _authService.SignUpAsync(signupDto);
+            var response = await _authService.SignUpAsync(_mapper.Map<SignupParameters>(model));
+            var apiResponse = await _authHeaderHandler.HandleApiResponse(response);
 
-            if (response.IsSuccessStatusCode)
+            if (apiResponse.Success)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var signupResponse = JsonConvert.DeserializeObject<SignupResponse>(content);
-                return RedirectToAction("VerifyOTP", "Authentication", new { id = signupResponse.Id });
+                return RedirectToAction("VerifyOtp", "Authentication", new { id = apiResponse.Data?.ToString() });
             }
-            else
+
+            else 
             {
-                var content = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("Error", content);
-                return View(model); 
+                ModelState.AddModelError("", apiResponse.Message ?? "Sign up failed.");
+                return View("~/Views/Auth/SignUp.cshtml", model);
             }
+
         }
-
 
         [HttpGet]
         public IActionResult Login()
@@ -59,21 +59,36 @@ namespace GameOria.Web.Controllers
         public async Task<IActionResult> Login(LoginParameters model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return View("~/Views/Auth/Login.cshtml", model);
 
             var response = await _authService.LoginAsync(model);
+            var apiResponse = await _authHeaderHandler.HandleApiResponse(response);
 
-            if (!response.IsSuccessStatusCode)
+            if (apiResponse.Success)
             {
-                ModelState.AddModelError("", "Invalid login attempt");
-                return View(model);
+                var token = apiResponse.Data.ToString();
+                if (!string.IsNullOrEmpty(token))
+                    HttpContext.Session.SetString("AuthToken", token);
+                return RedirectToAction("Profile", "Authentication");
+
             }
 
-            var tokenResponse = await response.Content.ReadAsStringAsync();
+            if (!apiResponse.Success)
+            {
+                var errorMessage = apiResponse.Message ?? "Invalid login attempt.";
+                if (apiResponse.Errors?.Any() == true)
+                    errorMessage += " " + string.Join(" ", apiResponse.Errors);
 
-            HttpContext.Session.SetString("AuthToken", tokenResponse);
+                ModelState.AddModelError("", errorMessage);
+                return View("~/Views/Auth/Login.cshtml", model);
+            }
+            else
+            {
+                ModelState.AddModelError("", apiResponse.Message ?? " Login failed.");
+                return View("~/Views/Auth/Login.cshtml", model);
 
-            return RedirectToAction("Profile");
+            }
+
         }
 
         public async Task<IActionResult> Profile()
@@ -135,6 +150,28 @@ namespace GameOria.Web.Controllers
             TempData["OtpError"] = "Failed to resend OTP, please try again.";
             return RedirectToAction("VerifyOtp", new { id = model.Id });
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            var response = await _authService.LogoutAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                HttpContext.Session.Remove("token");
+
+                if (Request.Cookies.ContainsKey("token"))
+                {
+                    Response.Cookies.Delete("token");
+                }
+                HttpContext.Session.Clear();
+
+                return Ok("LoggedOutSuccessfully");
+            }
+
+            return BadRequest("LogoutFailed");
+        }
+
+
 
 
 

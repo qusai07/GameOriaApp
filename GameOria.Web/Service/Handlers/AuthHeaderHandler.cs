@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Headers;
+﻿using GameOria.Shared.Response;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace GameOria.Web.Service.Handlers
 {
@@ -21,6 +23,21 @@ namespace GameOria.Web.Service.Handlers
 
             return await base.SendAsync(request, cancellationToken);
         }
+        public async Task<APIResponse> HandleApiResponse(HttpResponseMessage response)
+        {
+            if (response == null) return null;
+
+            var content = await response.Content.ReadAsStringAsync();
+            try
+            {
+                return JsonConvert.DeserializeObject<APIResponse>(content);
+            }
+            catch
+            {
+                return new APIResponse { Success = false, Message = "Unexpected server response." };
+            }
+        }
+
     }
 
 }

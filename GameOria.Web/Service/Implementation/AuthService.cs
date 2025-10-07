@@ -56,7 +56,10 @@ namespace GameOria.Web.Service.Implementation
             return await _httpClient.PostAsJsonAsync("SignupResendOtp", request);
         }
 
-
+        public async Task<HttpResponseMessage> LogoutAsync()
+        {
+            return await _httpClient.PostAsync("Logout",null);
+        }
     }
 
 }

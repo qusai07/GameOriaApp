@@ -17,7 +17,7 @@ namespace GameOria.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,21 +30,18 @@ namespace GameOria.Infrastructure.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("MobileNumber")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtpCode")
                         .IsRequired()
@@ -55,38 +52,27 @@ namespace GameOria.Infrastructure.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
                     b.ToTable("ApplicationUsers", (string)null);
 
-                    b.HasDiscriminator<string>("UserType").HasValue("Admin");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("GameOria.Domains.Entities.Identity.CustomerUser", b =>
                 {
                     b.HasBaseType("GameOria.Domains.Entities.Identity.ApplicationUser");
 
-                    b.HasDiscriminator().HasValue("Customer");
+                    b.ToTable("CustomerUsers", (string)null);
                 });
 
             modelBuilder.Entity("GameOria.Domains.Entities.Users.OrganizerUser", b =>
@@ -115,7 +101,25 @@ namespace GameOria.Infrastructure.Migrations
                     b.Property<DateTime?>("VerificationDate")
                         .HasColumnType("datetime2");
 
-                    b.HasDiscriminator().HasValue("Organizer");
+                    b.ToTable("OrganizerUsers", (string)null);
+                });
+
+            modelBuilder.Entity("GameOria.Domains.Entities.Identity.CustomerUser", b =>
+                {
+                    b.HasOne("GameOria.Domains.Entities.Identity.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("GameOria.Domains.Entities.Identity.CustomerUser", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameOria.Domains.Entities.Users.OrganizerUser", b =>
+                {
+                    b.HasOne("GameOria.Domains.Entities.Identity.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("GameOria.Domains.Entities.Users.OrganizerUser", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

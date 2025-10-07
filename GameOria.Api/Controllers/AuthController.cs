@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using GameOria.Api.Response;
+using GameOria.Shared.Response;
 
 namespace GameOria.Api.Controllers
 {
@@ -48,7 +48,7 @@ namespace GameOria.Api.Controllers
 
             try
             {
-                var user = new ApplicationUser
+                ApplicationUser user = new ()
                 {
                     FullName = signupParameters.FullName,
                     UserName = signupParameters.UserName,
@@ -62,11 +62,16 @@ namespace GameOria.Api.Controllers
                 user.PasswordHash = _passwordHasher.HashPassword(user, signupParameters.Password);
                 await _dataService.AddAsync(user);
                 await _dataService.SaveAsync();
-                return Ok(new { user.ID });
+                return Ok(new APIResponse
+                {
+                    Success = true,
+                    Message = "SignUpSuccess",
+                    Data = user.ID
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = "An error occurred while processing your request.",
@@ -86,7 +91,7 @@ namespace GameOria.Api.Controllers
 
                 if (user == null)
                 {
-                    return StatusCode(500,new ApiResponse
+                    return StatusCode(500,new APIResponse
                     {
                         Success = false,
                         Message = "UserNotFound"
@@ -96,7 +101,7 @@ namespace GameOria.Api.Controllers
                 var otpTimeOut = _configuration.GetValue("OtpTimeOut", 2); // default 2 mins
                 if (DateTime.UtcNow - user.OtpDate < TimeSpan.FromMinutes(otpTimeOut))
                 {
-                    return StatusCode(500, new ApiResponse
+                    return StatusCode(500, new APIResponse
                     {
                         Success = false,
                         Message = "OtpAlreadySent",
@@ -111,7 +116,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = "An error occurred while processing your request.",
@@ -144,7 +149,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
@@ -186,7 +191,7 @@ namespace GameOria.Api.Controllers
             try
             {
                 var user = _dataService.GetQuery<ApplicationUser>()
-        .FirstOrDefault(x => x.UserName == loginParameters.UserNameOrEmail || x.EmailAddress == loginParameters.UserNameOrEmail);
+                 .FirstOrDefault(x => x.UserName == loginParameters.UserNameOrEmail || x.EmailAddress == loginParameters.UserNameOrEmail);
 
 
                 if (user == null)
@@ -201,11 +206,14 @@ namespace GameOria.Api.Controllers
 
 
                 var token = _jwtHelper.GenerateToken(user);
-                return Ok(token);
+                return Ok(new APIResponse{
+                Data = token ,
+                Success = true
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse  
                 {
                     Success = false,
                     Message = ex.Message,
@@ -228,7 +236,7 @@ namespace GameOria.Api.Controllers
 
                 var resetCode = new Random().Next(100000, 999999).ToString();
 
-                var resetRequest = new PasswordResetRequest
+                PasswordResetRequest resetRequest = new ()
                 {
                     UserId = user.ID,
                     ResetCode = resetCode,
@@ -242,7 +250,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
@@ -280,7 +288,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
@@ -315,7 +323,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
@@ -350,7 +358,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
@@ -404,7 +412,7 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse
+                return StatusCode(500, new APIResponse
                 {
                     Success = false,
                     Message = ex.Message,
