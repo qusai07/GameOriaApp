@@ -14,7 +14,7 @@ namespace GameOria.Web.Service.Implementation
         }
         public async Task<HttpResponseMessage> RequestBecomeOrganizer(OrganizerRequestDto organizerRequestDto)
         {
-            return await _httpClient.PostAsJsonAsync("api/OrganizerRequests", organizerRequestDto);
+            return await _httpClient.PostAsJsonAsync("Organizer/BecomeOrganizer", organizerRequestDto);
         }
     }
 }

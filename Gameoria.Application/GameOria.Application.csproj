@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Folder Include="DTOs\Organizer\" />
 		<Folder Include="Features\Cards\Commands\DeleteCard\" />
 		<Folder Include="Features\Cards\Commands\" />
 		<Folder Include="Features\Cards\Commands\UpdateCard\" />

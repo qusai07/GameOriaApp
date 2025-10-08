@@ -61,7 +61,7 @@ namespace GameOria.Domains.Events.Games
         public bool RequiresNotification()
         {
             return IsPropertyModified(nameof(Game.Price)) ||
-                   IsPropertyModified(nameof(Game.IsAvailable)) ||
+                   //IsPropertyModified(nameof(Game.IsAvailable)) ||
                    IsPropertyModified(nameof(Game.IsPublished));
         }
 
@@ -93,7 +93,7 @@ namespace GameOria.Domains.Events.Games
             var criticalFields = new[]
             {
                 nameof(Game.Price),
-                nameof(Game.IsAvailable),
+                //nameof(Game.IsAvailable),
                 nameof(Game.Platform),
                 nameof(Game.Region)
             };

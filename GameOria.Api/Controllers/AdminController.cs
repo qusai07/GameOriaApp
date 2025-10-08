@@ -1,98 +1,72 @@
-﻿using GameOria.Domains.Entities.Users;
+﻿using GameOria.Api.Repo.Interface;
+using GameOria.Domains.Entities.Identity;
+using GameOria.Domains.Entities.Users;
 using GameOria.Domains.Enums;
-using GameOria.Infrastructure.Data;
 using GameOria.Shared.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace GameOria.Api.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
-        private readonly GameOriaDbContext _context;
 
-        public AdminController(GameOriaDbContext context)
+        public AdminController(IDataService dataService):base(dataService){}
+        [HttpGet("Get-All-Users")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            _context = context;
+            var requests = await _dataService.GetAllAsync<ApplicationUser>();
+            return Ok(requests);
         }
-
         [HttpGet("get-All-Organizers")]
         public async Task<IActionResult> GetAll()
         {
-            var requests = await _context.OrganizerUsers
-                .ToListAsync();
+            var requests = await _dataService.GetAllAsync<OrganizerUser>();
             return Ok(requests);
         }
         [HttpPost("approve/{userId}")]
         public async Task<IActionResult> ApproveOrganizer(Guid userId)
         {
-            var request = await _context.OrganizerUsers
-                .FirstOrDefaultAsync(r => r.ID == userId && !r.IsVerified);
+            var request = await _dataService.GetQuery<OrganizerUser>()
+                                .FirstOrDefaultAsync(r => r.UserId == userId && !r.IsVerified);
+
 
             if (request == null)
-                return NotFound("No pending organizer request found for this user.");
+                return NotFound(new APIResponse
+                {
+                    Success = false,
+                    Message = "No pending organizer request found for this user."
+                });
 
             request.IsVerified = true;
             request.VerificationDate = DateTime.UtcNow;
 
-            var user = await _context.ApplicationUsers.FindAsync(userId);
+            var user = await _dataService.GetQuery<ApplicationUser>().FirstOrDefaultAsync(u => u.ID == userId);
             if (user == null)
-                return NotFound("User not found.");
-
-            var existingOrganizer = await _context.OrganizerUsers.FindAsync(userId);
-            if (existingOrganizer == null)
-            {
-                OrganizerUser organizer = new ()
+                return NotFound(new APIResponse
                 {
-                    ID = user.ID,
-                    UserName = user.UserName,
-                    EmailAddress = user.EmailAddress,
-                    StoreName = request.StoreName,
-                    BusinessEmail = request.BusinessEmail,
-                    IdentityNumber = request.IdentityNumber,
-                    PhoneNumber = request.PhoneNumber,
-                    IsVerified = true,
-                    VerificationDate = DateTime.UtcNow
-                };
+                    Success = false,
+                    Message = "User not found."
+                });
 
-                _context.OrganizerUsers.Add(organizer);
-            }
-
-            await _context.SaveChangesAsync();
-
+            user.Role = Roles.Organizer;
+            await _dataService.SaveAsync();
             return Ok(new APIResponse
             {
-                Message = "User approved as Organizer successfully.",
-                Data = request
+                Success = true,
+                Message = "User approved as Organizer successfully."
             });
-        }
-
-        [HttpGet("get-All-Customers")]
-        public async Task<IActionResult> GetAllCustomers()
-        {
-            var customers = await _context.ApplicationUsers
-                .Where(u => u.Role == Roles.Customer)   
-                .Select(u => new
-                {
-                    u.FullName,
-                    u.EmailAddress,
-                    u.MobileNumber,
-                    u.Role,
-                    u.IsActive
-                })
-                .ToListAsync();
-
-            return Ok(customers);
         }
 
         [HttpPost("toggle-status/{id}")]
         public async Task<IActionResult> ToggleUserStatus(Guid id)
         {
-            var user = await _context.ApplicationUsers.FindAsync(id);
+            var user = await _dataService.GetQuery<ApplicationUser>().FirstOrDefaultAsync(u => u.ID == id);
             if (user == null) return NotFound("User not found.");
 
             user.IsActive = !user.IsActive;
-            await _context.SaveChangesAsync();
+            await _dataService.SaveAsync();
 
             return Ok(new { user.ID, user.IsActive });
         }
@@ -100,18 +74,21 @@ namespace GameOria.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var user = await _context.ApplicationUsers.FindAsync(id);
-            if (user == null) return NotFound("User not found.");
+            var user = await _dataService.GetQuery<ApplicationUser>().FirstOrDefaultAsync(u=> u.ID == id);
+            if (user == null) return NotFound("UserNotFound.");
 
-            _context.ApplicationUsers.Remove(user);
-            await _context.SaveChangesAsync();
+            await _dataService.DeleteAsync<ApplicationUser>(user);
+            await _dataService.SaveAsync();
 
             return Ok(new { Message = "User deleted successfully." });
         }
 
-        public async Task <IActionResult> Index()
-        {
-            return View();
-        }
+        //public async Task<IActionResult> ChangeRoleUser
+        //public async Task<IActionResult> GetStores
+        //public async Task<IActionResult> StatusStore
+        //public async Task<IActionResult> 
+        //public async Task<IActionResult> 
+
+
     }
 }

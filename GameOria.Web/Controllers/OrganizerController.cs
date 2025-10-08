@@ -16,13 +16,11 @@ namespace GameOria.Web.Controllers
             _organizerService = organizerService;
         }
 
-        // GET: عرض الصفحة
         public IActionResult BecomeOrganizer()
         {
             return View("~/Views/Organizer/BecomeOrganizer.cshtml");
         }
 
-        // POST: إرسال طلب الـ Organizer
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BecomeOrganizer(BecomeOrganizerViewModel model)
@@ -54,5 +52,14 @@ namespace GameOria.Web.Controllers
                 return View("~/Views/Organizer/BecomeOrganizer.cshtml", model);
             }
         }
+
+
+        //public async Task<IActionResult> 
+
+
+
+
+
+
     }
 }

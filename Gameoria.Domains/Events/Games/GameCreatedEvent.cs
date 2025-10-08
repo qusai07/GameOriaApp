@@ -33,7 +33,7 @@ namespace GameOria.Domains.Events.Games
             return new Dictionary<string, object>
             {
                 { "GameId", Game.Id },
-                { "GameName", Game.Name },
+                //{ "GameName", Game. },
                 { "StoreId", StoreId },
                 { "CreatedBy", CreatedBy },
                 { "CreatedAt", CreatedAt },
@@ -56,8 +56,8 @@ namespace GameOria.Domains.Events.Games
         {
             // Logic to determine if notifications should be sent
             return Game.IsPublished &&
-                   !Game.IsDraft &&
-                   Game.IsAvailable;
+                   !Game.IsDraft;
+                   //&&Game.IsAvailable;
         }
     }
 }

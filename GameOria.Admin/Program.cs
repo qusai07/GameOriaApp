@@ -8,7 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddHttpClient("GameOriaApi", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:7075/api/Admin");
+    client.BaseAddress = new Uri("http://localhost:7075/api/Admin/");
 });
 
 builder.Services.AddScoped<APIService>();

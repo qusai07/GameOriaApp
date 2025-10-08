@@ -6,11 +6,22 @@ namespace GameOria.Domains.Entities.Cards
 {
     public class Card : BaseAuditableEntity
     {
-        public string Name { get; set; } = string.Empty;
+        public Card() { }
+
+        public Card(string title, string description, Money price, Guid storeId)
+        {
+            Title = title;
+            Description = description;
+            Price = price;
+            StoreId = storeId;
+            IsActive = true;
+        }
+
+        public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
-        public Money Price { get; set; }
+        public Money Price { get; set; } = Money.Zero();
         public bool IsActive { get; set; } = true;
+        public bool IsDraft { get; set; } = false;
 
         // Foreign keys
         public Guid StoreId { get; set; }
@@ -18,22 +29,29 @@ namespace GameOria.Domains.Entities.Cards
 
         // Navigation properties
         public virtual Store Store { get; set; }
-        public virtual CardCategory Category { get; set; }
+        public virtual CardCategory? Category { get; set; }
         public virtual ICollection<CardCode> Codes { get; set; } = new List<CardCode>();
 
-        // Metadata
-        public string Publisher { get; set; } = string.Empty;
+        // Optional properties
         public string Region { get; set; } = string.Empty;
-        public string Platform { get; set; } = string.Empty; // e.g., "PlayStation", "Xbox", "Steam"
-        public string Currency { get; set; } = string.Empty; // e.g., "USD", "EUR"
-        public decimal Value { get; set; } // The actual value of the card
+        public string Platform { get; set; } = string.Empty;
 
-        // Inventory tracking
+        // Inventory
         public int AvailableQuantity { get; set; }
         public int MinimumStockLevel { get; set; }
 
-        // Validation
-        public bool RequiresAge18Verification { get; set; }
-        public DateTime? ExpirationDate { get; set; }
+        // Metrics
+        public int TotalSales { get; set; }
+        public decimal AverageRating { get; set; }
+
+        // Methods
+        public bool HasSufficientStock(int requestedQuantity) => AvailableQuantity >= requestedQuantity;
+
+        public void UpdateStock(int quantity)
+        {
+            AvailableQuantity += quantity;
+            if (AvailableQuantity < 0) AvailableQuantity = 0;
+        }
     }
+
 }

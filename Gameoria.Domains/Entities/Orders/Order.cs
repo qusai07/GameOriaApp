@@ -7,50 +7,65 @@ namespace GameOria.Domains.Entities.Orders
 {
     public class Order : BaseAuditableEntity
     {
-        public string OrderNumber { get; private set; }
-        public int UserId { get; set; } // Changed to int to match User's Id type
+        // Basic info
+        public string OrderNumber { get; private set; } = string.Empty;
+        public Guid UserId { get; private set; } 
         public OrderStatus Status { get; private set; }
         public PaymentStatus PaymentStatus { get; private set; }
-        public Money TotalAmount { get; private set; }
+        public Money TotalAmount { get; private set; } = Money.Zero();
 
-        // Navigation properties
+        // Navigation
         public virtual ApplicationUser User { get; set; } = null!;
         public virtual ICollection<OrderItem> Items { get; private set; } = new List<OrderItem>();
-        public virtual ICollection<OrderCode> Codes { get; private set; } = new List<OrderCode>();
+        public virtual ICollection<OrderCode> Codes { get; set; } = new List<OrderCode>();
 
-        // Payment information
+        // Payment
         public string? PaymentMethod { get; private set; }
         public string? PaymentTransactionId { get; private set; }
         public DateTime? PaymentDate { get; private set; }
 
         // Dates
-        public DateTime OrderDate { get; private set; }
+        public DateTime OrderDate { get; private set; } = DateTime.UtcNow;
         public DateTime? CompletedDate { get; private set; }
         public DateTime? CancelledDate { get; private set; }
 
-        // Additional information
+        // Additional info
         public string? Notes { get; set; }
         public string? CancellationReason { get; private set; }
-        public string? CustomerIp { get; set; }
+        public string? CustomerIp { get; private set; }
 
-        // Constructor
-        private Order() { } // For EF Core
+        private Order() { } // EF Core constructor
 
-        public Order(int userId, Money totalAmount, string? customerIp = null)
+        public static Order Create(Guid userId, string? customerIp = null)
         {
-            UserId = userId;
-            TotalAmount = totalAmount;
-            CustomerIp = customerIp;
-            OrderNumber = GenerateOrderNumber();
-            OrderDate = DateTime.UtcNow;
-            Status = OrderStatus.Pending;
-            PaymentStatus = PaymentStatus.Pending;
+            return new Order
+            {
+                UserId = userId,
+                CustomerIp = customerIp,
+                OrderNumber = $"ORD-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid():N}".ToUpper(),
+                Status = OrderStatus.Pending,
+                PaymentStatus = PaymentStatus.Pending,
+                TotalAmount = Money.Zero()
+            };
         }
 
-        // Methods
-        private string GenerateOrderNumber()
+        public void AddItem(OrderItem item)
         {
-            return $"ORD-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8]}".ToUpper();
+            Items.Add(item);
+            RecalculateTotal();
+        }
+
+        private void RecalculateTotal()
+        {
+            TotalAmount = new Money(
+                Items.Sum(i => i.SubTotal.Amount),
+                Items.FirstOrDefault()?.SubTotal.Currency ?? "USD"
+            );
+        }
+
+        public void SetPaymentMethod(string method)
+        {
+            PaymentMethod = method ?? throw new ArgumentNullException(nameof(method));
         }
 
         public void UpdatePaymentStatus(PaymentStatus status, string? transactionId = null)
@@ -76,23 +91,5 @@ namespace GameOria.Domains.Entities.Orders
                     break;
             }
         }
-
-        public void SetPaymentMethod(string method)
-        {
-            PaymentMethod = method ?? throw new ArgumentNullException(nameof(method));
-        }
-
-        public void AddItem(OrderItem item)
-        {
-            Items.Add(item);
-            RecalculateTotalAmount();
-        }
-
-        private void RecalculateTotalAmount()
-        {
-            TotalAmount = new Money(Items.Sum(i => i.SubTotal.Amount));
-        }
-
-
     }
 }

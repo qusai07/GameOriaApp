@@ -41,8 +41,7 @@ namespace GameOria.Infrastructure.Persistence.Configurations
 
             builder.HasDiscriminator<string>("UserType")
                    .HasValue<ApplicationUser>("Admin")
-                   .HasValue<OrganizerUser>("Organizer")
-                   .HasValue<CustomerUser>("Customer");
+                   .HasValue<OrganizerUser>("Organizer");
 
 
 

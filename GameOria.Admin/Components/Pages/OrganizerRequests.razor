@@ -1,6 +1,8 @@
 ﻿@page "/organizer-requests"
 @inject GameOria.Admin.Services.APIService APIService
-@using GameOria.Shared.DTOs.Organizer
+@using GameOria.Admin.ViewModels
+
+<h3 class="mb-4 text-center">Organizer Requests</h3>
 
 <div class="mb-3 d-flex justify-content-between">
     <input type="text" class="form-control w-25" placeholder="Search Requests..." @bind="searchTerm" />
@@ -9,7 +11,7 @@
 <table class="table table-hover align-middle shadow-sm rounded-2">
     <thead class="table-light">
         <tr>
-            <th>User</th>
+            <th>#</th>
             <th>Store Name</th>
             <th>Business Email</th>
             <th>Identity Number</th>
@@ -19,44 +21,77 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var r in filteredRequests)
+        @if (filteredRequests.Any())
+        {
+            int index = 1;
+            @foreach (var r in filteredRequests)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@r.StoreName</td>
+                    <td>@r.BusinessEmail</td>
+                    <td>@r.IdentityNumber</td>
+                    <td>@r.PhoneNumber</td>
+                    <td>
+                        @if (r.IsVerified)
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!r.IsVerified)
+                        {
+                            <button class="btn btn-sm btn-success" @onclick="() => ApproveRequest(r.UserId)">Approve</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-secondary" disabled>Approved</button>
+                        }
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
         {
             <tr>
-                <td>@r.UserFullName</td>
-                <td>@r.StoreName</td>
-                <td>@r.BusinessEmail</td>
-                <td>@r.IdentityNumber</td>
-                <td>@r.PhoneNumber</td>
-                <td>
-                    <input type="checkbox" checked="@r.IsApproved" disabled />
-                </td>
-                <td>
-                    <button class="btn btn-sm btn-success" @onclick="() => ApproveRequest(r)">Approve</button>
-                </td>
+                <td colspan="7" class="text-center text-muted">No organizer requests found.</td>
             </tr>
         }
     </tbody>
 </table>
 
 @code {
-    private List<OrganizerRequestDto> requests = new();
+    private List<OrganizerTables> requests = new();
     private string searchTerm = "";
 
-    private IEnumerable<OrganizerRequestDto> filteredRequests =>
-        requests.Where(r =>
-            string.IsNullOrWhiteSpace(searchTerm) ||
-            r.UserFullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            r.StoreName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-        );
+    private IEnumerable<OrganizerTables> filteredRequests =>
+        string.IsNullOrWhiteSpace(searchTerm)
+            ? requests
+            : requests.Where(r =>
+                (r.StoreName?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (r.BusinessEmail?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (r.IdentityNumber?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false));
 
     protected override async Task OnInitializedAsync()
     {
         requests = await APIService.GetAllOrganizerRequestsAsync();
     }
 
-    private async Task ApproveRequest(OrganizerRequestDto request)
+    private async Task ApproveRequest(Guid userId)
     {
-        await APIService.ApproveOrganizerAsync(request.UserId);
-        request.IsApproved = true; 
+        var response = await APIService.ApproveOrganizerAsync(userId);
+        if (response.Success)
+        {
+            var req = requests.FirstOrDefault(r => r.UserId == userId);
+            if (req != null)
+                req.IsVerified = true;
+        }
     }
+
 }
+

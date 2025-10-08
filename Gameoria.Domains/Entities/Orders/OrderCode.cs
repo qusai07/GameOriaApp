@@ -2,23 +2,22 @@
 using GameOria.Domains.Entities.Cards;
 using GameOria.Domains.Entities.Games;
 
-
 namespace GameOria.Domains.Entities.Orders
 {
     public class OrderCode : BaseAuditableEntity
     {
-        public Guid OrderId { get; set; }
+        public Guid OrderId { get; set; }       
         public Guid OrderItemId { get; set; }
-        public string ProductType { get; set; } // "Game" or "Card"
+        public string ProductType { get; set; } = string.Empty; 
         public string Code { get; set; } = string.Empty;
 
-        // Navigation properties
-        public virtual Order Order { get; set; }
-        public virtual OrderItem OrderItem { get; set; }
-        public virtual GameCode GameCode { get; set; }
-        public virtual CardCode CardCode { get; set; }
+        // Navigation
+        public virtual Order Order { get; set; } = null!;     
+        public virtual OrderItem OrderItem { get; set; } = null!;
+        public virtual GameCode? GameCode { get; set; }
+        public virtual CardCode? CardCode { get; set; }
 
-        // Code status
+        // Status tracking
         public bool IsRevealed { get; set; }
         public DateTime? RevealedAt { get; set; }
         public bool IsActivated { get; set; }
@@ -41,5 +40,33 @@ namespace GameOria.Domains.Entities.Orders
         // Support
         public bool HasSupportTicket { get; set; }
         public string? SupportTicketId { get; set; }
+
+        public static OrderCode CreateFromGameCode(OrderItem item, GameCode code)
+        {
+            return new OrderCode
+            {
+                OrderItem = item,
+                OrderItemId = item.Id,
+                ProductType = "Game",
+                Code = code.Code,
+                GameCode = code,
+                ExpirationDate = code.ExpirationDate,
+                IsValid = code.IsValid
+            };
+        }
+
+        public static OrderCode CreateFromCardCode(OrderItem item, CardCode code)
+        {
+            return new OrderCode
+            {
+                OrderItem = item,
+                OrderItemId = item.Id,
+                ProductType = "Card",
+                Code = code.Code,
+                CardCode = code,
+                ExpirationDate = code.ExpirationDate,
+                IsValid = code.IsValid
+            };
+        }
     }
 }

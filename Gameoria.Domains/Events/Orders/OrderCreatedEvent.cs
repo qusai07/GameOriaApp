@@ -16,7 +16,7 @@ namespace GameOria.Domains.Events.Orders
         public OrderCreatedEvent(Order order)
         {
             Order = order ?? throw new ArgumentNullException(nameof(order));
-            CustomerId = order.UserId;
+            //CustomerId = order.UserId;
             CreatedAt = DateTime.UtcNow;
             TotalAmount = order.TotalAmount;
         }
