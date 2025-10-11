@@ -23,10 +23,14 @@ namespace GameOria.Api.Controllers
         //helper method
         protected Guid? GetUserId()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst("Id")?.Value;
             if (Guid.TryParse(userId, out var guid))
                 return guid;
             return null;
+        }
+        protected string? GetIdentityNumber()
+        {
+            return User.FindFirst("IdentityNumber")?.Value;
         }
 
     }

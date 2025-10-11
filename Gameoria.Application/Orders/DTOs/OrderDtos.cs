@@ -29,8 +29,14 @@ namespace GameOria.Application.Orders.DTOs
 
     public class OrderCodeDto
     {
-        public string Code { get; set; } = string.Empty;
+        public Guid Id { get; set; }
+        public Guid OrderItemId { get; set; }
         public string ProductType { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+        public bool IsRevealed { get; set; }
+        public bool IsActivated { get; set; }
+        public bool IsValid { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 
     public class MoneyDto

@@ -1,5 +1,6 @@
 using GameOria.Api.StartUp;
 using GameOria.Infrastructure.Data;
+using GameOria.Infrastructure.Helper.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCorsPolicies();
@@ -9,6 +10,8 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.Configure<EmailSettings>(
+           builder.Configuration.GetSection("EmailSettings"));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // Add authentication and authorization services

@@ -5,7 +5,7 @@
         IGameRepository Games { get; }
         ICardRepository Cards { get; }
         IStoreRepository Stores { get; }
-        IOrderRepository Orders { get; }
+        //IOrderRepository Orders { get; }
         IUserRepository Users { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -1,0 +1,183 @@
+﻿@model GameOria.Shared.ViewModels.Organizer.CompleteStoreProfileVM
+
+<style>
+    body {
+        background: url('../assets/images/welcome-hero/banner.jpg') no-repeat;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        padding: 0;
+    }
+
+    .verify-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .verify-card {
+        background-color: #181818;
+        border-radius: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        padding: 4rem 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: start;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+        .verify-card h3 {
+            color: #ff3b3b;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .verify-card p {
+            color: #bbb;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+    .form-control {
+        background: #222;
+        color: #fff;
+        border: 2px solid #333;
+        border-radius: 12px;
+        padding: 1rem;
+        font-size: 1.1rem;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #ff3b3b;
+            background: #2b2b2b;
+            outline: none;
+        }
+
+    .btn-submit {
+        background-color: #ff3b3b;
+        color: white;
+        font-weight: 700;
+        border: none;
+        padding: 1rem;
+        width: 100%;
+        border-radius: 50px;
+        font-size: 1.25rem;
+        margin-top: 1.5rem;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+        .btn-submit:hover {
+            background-color: #ff5555;
+            transform: scale(1.05);
+        }
+</style>
+
+<div class="verify-container">
+    <div class="verify-card">
+        <h3>Please complete your profile</h3>
+        <p>Please enter all your data </p>
+
+        <form asp-action="CompleteProfile" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OwnerFirstName" class="form-label"></label>
+                    <input asp-for="OwnerFirstName" class="form-control" />
+                    <span asp-validation-for="OwnerFirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OwnerLastName" class="form-label"></label>
+                    <input asp-for="OwnerLastName" class="form-control" />
+                    <span asp-validation-for="OwnerLastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StoreName" class="form-label"></label>
+                <input asp-for="StoreName" class="form-control" />
+                <span asp-validation-for="StoreName" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="IdentityNumber" class="form-label"></label>
+                    <input asp-for="IdentityNumber" class="form-control" />
+                    <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OwnerDateOfBirth" class="form-label"></label>
+                    <input asp-for="OwnerDateOfBirth" type="date" class="form-control" />
+                    <span asp-validation-for="OwnerDateOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OwnerEmail" class="form-label"></label>
+                    <input asp-for="OwnerEmail" class="form-control" type="email" />
+                    <span asp-validation-for="OwnerEmail" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OwnerPhone" class="form-label"></label>
+                    <input asp-for="OwnerPhone" class="form-control" type="tel" />
+                    <span asp-validation-for="OwnerPhone" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LogoUrl" class="form-label"></label>
+                    <input asp-for="LogoUrl" class="form-control" type="text" placeholder="Logo image URL" />
+                    <span asp-validation-for="LogoUrl" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CoverImageUrl" class="form-label"></label>
+                    <input asp-for="CoverImageUrl" class="form-control" type="text" placeholder="Cover image URL" />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TitleDescription" class="form-label"></label>
+                <textarea asp-for="TitleDescription" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="TitleDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ShortcutWebsite" class="form-label"></label>
+                <input asp-for="ShortcutWebsite" class="form-control" placeholder="https://yourstore.com" />
+                <span asp-validation-for="ShortcutWebsite" class="text-danger"></span>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-4">
+                    <i class="bi bi-check-circle"></i> Save Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -3,16 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameOria.Domains.Entities.Users
 {
-    public class OrganizerUser : ApplicationUser
+    public class OrganizerUser 
     {
-        public Guid UserId { get; set; }
+        public int ID { get; set; }
+
         public string StoreName { get; set; } 
 
-        public string? BusinessEmail { get; set; } 
+        public string IdentityNumber { get; set; } 
 
-        public string? PhoneNumber { get; set; } 
-
-        public string IdentityNumber { get; set; }
+        public string Email { get; set; }
 
         public bool IsVerified { get; set; }
 

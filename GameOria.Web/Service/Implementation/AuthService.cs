@@ -42,7 +42,7 @@ namespace GameOria.Web.Service.Implementation
 
         public async Task<HttpResponseMessage> UpdateProfileAsync(ProfileViewModel request)
         {
-            return await _httpClient.PostAsJsonAsync("UpdateProfile" , request);
+            return await _httpClient.PostAsJsonAsync("UpdateProfile", request);
         }
 
         public async Task<HttpResponseMessage> VerifyOtpAsync(Guid id, string otp)
@@ -58,7 +58,7 @@ namespace GameOria.Web.Service.Implementation
 
         public async Task<HttpResponseMessage> LogoutAsync()
         {
-            return await _httpClient.PostAsync("Logout",null);
+            return await _httpClient.PostAsync("Logout", null);
         }
     }
 

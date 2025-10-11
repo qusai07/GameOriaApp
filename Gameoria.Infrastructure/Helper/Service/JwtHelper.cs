@@ -1,4 +1,5 @@
 ﻿using GameOria.Domains.Entities.Identity;
+using GameOria.Domains.Enums;
 using GameOria.Infrastructure.Helper.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,16 +18,51 @@ namespace GameOria.Api.Helper.Service
             _jwtSettings = jwtSettings.Value;
         }
 
+        public bool ValidateToken(string token, out string identityNumber)
+        {
+            identityNumber = null;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
+
+            try
+            {
+                var claims = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = _jwtSettings.Issuer,
+                    ValidAudience = _jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                identityNumber = claims.FindFirst("IdentityNumber")?.Value;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         public string GenerateToken(ApplicationUser user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                new Claim("Id", user.ID.ToString()),        
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.Role.ToString())            };
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
+            if (user.Role == Roles.Organizer && !string.IsNullOrEmpty(user.IdentityNumber))
+            {
+                claims.Add(new Claim("IdentityNumber", user.IdentityNumber));
+            }
+
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,

@@ -1,18 +1,27 @@
-﻿using GameOria.Api.Repo.Interface;
+﻿using GameOria.Api.Helper.Service;
+using GameOria.Api.Repo.Interface;
+using GameOria.Application.Interface;
 using GameOria.Domains.Entities.Identity;
 using GameOria.Domains.Entities.Users;
 using GameOria.Domains.Enums;
 using GameOria.Shared.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 
 namespace GameOria.Api.Controllers
 {
     public class AdminController : BaseController
     {
+        private readonly JwtHelper _jwtHelper;
+        private readonly IMailService _mailService ;
 
-        public AdminController(IDataService dataService):base(dataService){}
+        public AdminController(IDataService dataService, JwtHelper jwtHelper ,IMailService mailService) : base(dataService)
+        {
+            _jwtHelper = jwtHelper;
+            _mailService = mailService;
+        }
         [HttpGet("Get-All-Users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -25,12 +34,12 @@ namespace GameOria.Api.Controllers
             var requests = await _dataService.GetAllAsync<OrganizerUser>();
             return Ok(requests);
         }
-        [HttpPost("approve/{userId}")]
-        public async Task<IActionResult> ApproveOrganizer(Guid userId)
+
+        [HttpPost("ApproveOrganizer")]
+        public async Task<IActionResult> ApproveOrganizer(string identityNumber)
         {
             var request = await _dataService.GetQuery<OrganizerUser>()
-                                .FirstOrDefaultAsync(r => r.UserId == userId && !r.IsVerified);
-
+                .FirstOrDefaultAsync(r => r.IdentityNumber == identityNumber && !r.IsVerified);
 
             if (request == null)
                 return NotFound(new APIResponse
@@ -42,20 +51,31 @@ namespace GameOria.Api.Controllers
             request.IsVerified = true;
             request.VerificationDate = DateTime.UtcNow;
 
-            var user = await _dataService.GetQuery<ApplicationUser>().FirstOrDefaultAsync(u => u.ID == userId);
-            if (user == null)
-                return NotFound(new APIResponse
-                {
-                    Success = false,
-                    Message = "User not found."
-                });
+            var tempUser = new ApplicationUser
+            {
+                ID = Guid.NewGuid(),
+                UserName = request.StoreName,
+                Role = Roles.Organizer,
+                EmailAddress = request.Email,
+                IdentityNumber = request.IdentityNumber
+            };
+            var registrationToken = _jwtHelper.GenerateToken(tempUser);
 
-            user.Role = Roles.Organizer;
+            var encodedToken = HttpUtility.UrlEncode(registrationToken);
+            var link = $"https://localhost:7269/MagicLinkOnboarding/CompleteRegistration?token={encodedToken}";
+
+            await _mailService.SendEmailAsync(
+                request.Email,
+                "Complete Your Registration",
+                $"Welcome to GameOria! Please complete your registration by clicking <a href='{link}'>here</a>. This link will expire in 24 hours."
+            );
+
             await _dataService.SaveAsync();
+
             return Ok(new APIResponse
             {
                 Success = true,
-                Message = "User approved as Organizer successfully."
+                Message = "Approval successful. Registration link sent to user."
             });
         }
 

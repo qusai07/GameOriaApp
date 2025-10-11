@@ -66,10 +66,31 @@ namespace GameOria.Web.Controllers
 
             if (apiResponse.Success)
             {
-                var token = apiResponse.Data.ToString();
+                var tokenAndRole = apiResponse.Data.ToString();
+
+                var parts = tokenAndRole.Split(' ');
+                var token = parts[0];
+                var role = parts.Length > 1 ? parts[1] : string.Empty;
+
                 if (!string.IsNullOrEmpty(token))
-                    HttpContext.Session.SetString("AuthToken", token);
-                return RedirectToAction("Profile", "Authentication");
+                {
+                HttpContext.Session.SetString("AuthToken", token); 
+                HttpContext.Session.SetString("UserRole", role);
+
+                }
+                 
+
+                switch (role.ToLower())
+                {
+                    case "admin":
+                        return RedirectToAction("Dashboard", "Admin");
+                    case "organizer":
+                        return RedirectToAction("Profile", "Authentication");
+                    case "user":
+                        return RedirectToAction("Home", "User");
+                    default:
+                        return RedirectToAction("Index", "Home");
+                }
 
             }
 

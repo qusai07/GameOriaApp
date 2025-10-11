@@ -23,7 +23,7 @@ namespace GameOria.Api.StartUp
             {
                 options.AddPolicy("AllowLocalNetwork", policy =>
                 {
-                    policy.WithOrigins("https://172.20.10.2:7075", "http://localhost:7075")
+                    policy.WithOrigins("https://10.255.254.40.2:7075", "http://localhost:7075")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });

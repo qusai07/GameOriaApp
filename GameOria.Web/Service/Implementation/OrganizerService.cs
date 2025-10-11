@@ -8,13 +8,21 @@ namespace GameOria.Web.Service.Implementation
     {
         private readonly HttpClient _httpClient;
 
-        public OrganizerService(HttpClient httpClient)
+        public OrganizerService(HttpClient httpClient )
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClient = httpClient;
         }
         public async Task<HttpResponseMessage> RequestBecomeOrganizer(OrganizerRequestDto organizerRequestDto)
         {
-            return await _httpClient.PostAsJsonAsync("Organizer/BecomeOrganizer", organizerRequestDto);
+            return await _httpClient.PostAsJsonAsync("Become-organizer-requests", organizerRequestDto);
+        }
+        public async Task<HttpResponseMessage> GetMyStatusRequest()
+        {
+            return await _httpClient.GetAsync("Get-My-Status-Request");
+        }
+        public async Task<HttpResponseMessage> GetMyStore()
+        {
+            return await _httpClient.GetAsync("Get-Store-Owner-By-Id");
         }
     }
 }

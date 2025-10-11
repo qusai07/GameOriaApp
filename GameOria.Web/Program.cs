@@ -1,3 +1,4 @@
+using GameOria.Application.Stores.Service;
 using GameOria.Web.Service.Handlers;
 using GameOria.Web.Service.Implementation;
 using GameOria.Web.Service.Interface;
@@ -29,7 +30,20 @@ builder.Services.AddHttpClient<IAuthService, AuthService>(c =>
 })
 .AddHttpMessageHandler<AuthHeaderHandler>();
 
+
+
+builder.Services.AddHttpClient<IOrganizerService, OrganizerService>(c =>
+{
+    c.BaseAddress = new Uri("http://localhost:7075/api/OrganizerAPI/");
+});
 builder.Services.AddAutoMapper(typeof(Program));
+
+
+builder.Services.AddHttpClient("GameOriaApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:7075/api/");
+})
+.AddHttpMessageHandler<AuthHeaderHandler>();
 
 var app = builder.Build();
 
@@ -43,9 +57,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseRouting();
 app.UseSession();
+app.UseRouting();
 
 app.UseAuthorization();
 

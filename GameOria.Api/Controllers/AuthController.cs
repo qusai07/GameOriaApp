@@ -207,7 +207,7 @@ namespace GameOria.Api.Controllers
 
                 var token = _jwtHelper.GenerateToken(user);
                 return Ok(new APIResponse{
-                Data = token ,
+                Data = token + " " + user.Role,
                 Success = true
                 });
             }

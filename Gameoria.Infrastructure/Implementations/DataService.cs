@@ -3,7 +3,7 @@ using GameOria.Api.Repo.Interface;
 using GameOria.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameOria.Infrastructure.Repo.Implementations
+namespace GameOria.Infrastructure.Implementations
 {
     public class DataService:IDataService
     {

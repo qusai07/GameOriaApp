@@ -22,7 +22,6 @@ namespace GameOria.Infrastructure.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
         public DbSet<OrganizerUser> OrganizerUsers { get; set; } = null!;
         public DbSet<Store> Stores { get; set; }
-        public DbSet<StoreOwner> StoreOwners { get; set; }
         public DbSet<StoreReview> StoreReviews { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameCategory> GameCategories { get; set; }

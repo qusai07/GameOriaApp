@@ -1,4 +1,5 @@
 ﻿using GameOria.Api.Repo.Interface;
+using GameOria.Domains.Entities.Stores;
 using GameOria.Domains.Entities.Users;
 using GameOria.Infrastructure.Data;
 using GameOria.Shared.DTOs.Organizer;
@@ -6,10 +7,12 @@ using GameOria.Shared.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace GameOria.Api.Controllers
 {
+    //[Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
     public class OrganizerAPIController : BaseController
     {
         private readonly GameOriaDbContext _context;
@@ -22,7 +25,7 @@ namespace GameOria.Api.Controllers
         public async Task<IActionResult> BecomeOrganizerRequest([FromBody] OrganizerRequestDto organizerRequestDto)
         {
             var existingRequest = await _dataService.GetQuery<OrganizerUser>()
-                .FirstOrDefaultAsync(r => r.UserId == organizerRequestDto.UserId && !r.IsVerified);
+                .FirstOrDefaultAsync(r => r.IdentityNumber == organizerRequestDto.IdentityNumber && !r.IsVerified);
 
             if (existingRequest != null)
                 return BadRequest(new APIResponse
@@ -33,16 +36,14 @@ namespace GameOria.Api.Controllers
 
             try
             {
-                OrganizerUser Request = new()
+                OrganizerUser user = new()
                 {
-                    UserId = organizerRequestDto.UserId,
-                    BusinessEmail = organizerRequestDto.BusinessEmail,
                     IdentityNumber = organizerRequestDto.IdentityNumber,
-                    PhoneNumber = organizerRequestDto.PhoneNumber,
                     StoreName = organizerRequestDto.StoreName,
+                    Email = organizerRequestDto.Email
                 };
 
-                await _dataService.AddAsync(Request);
+                await _dataService.AddAsync(user);
                 await _dataService.SaveAsync();
                 return Ok(new APIResponse
                 {
@@ -53,8 +54,83 @@ namespace GameOria.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new APIResponse
+                {
+                    Success = false,
+                    Message = "SomethingError"
+                });
             }  
         }
+
+
+        //Notes
+        [HttpGet("Get-My-Status-Request")]
+        public async Task<IActionResult> GetMyStatusRequest()
+        {
+            var existingRequest = await _dataService.GetQuery<OrganizerUser>()
+                .FirstOrDefaultAsync(r => r.IdentityNumber !=null);
+
+            if (existingRequest == null)
+            {
+                return NotFound(new APIResponse
+                {
+                    Success = false,
+                    Message = "Organizer request not found."
+                });
+            }
+
+            if (existingRequest.IsVerified == false)
+            {
+                return BadRequest(new APIResponse
+                {
+                    Success = false,
+                    Message = "You can't be an organizer."
+                });
+            }
+
+            if (existingRequest.IsVerified == null)
+            {
+                return Ok(new APIResponse
+                {
+                    Success = false,
+                    Message = "You already have a pending request."
+                });
+            }
+
+            return Ok(new APIResponse
+            {
+                Success = true,
+                Message = "Welcome to GameOria! Please complete your store profile within 3 days."
+            });
+
+        }
+
+        [HttpGet("Get-My-Store")]
+        public async Task<IActionResult> GetMyStore()
+        {
+            var userId = GetUserId();
+            var store = await _dataService.GetQuery<Store>()
+              .FirstOrDefaultAsync(r => r.UserId == userId);
+            if(store == null)
+            {
+                return Ok(new APIResponse
+                {
+                    Success = false,
+                    Message = "You don't have store yet"
+                });
+            }
+            else
+            {
+                return Ok(new APIResponse
+                {
+                    Success = false,
+                    Message = "You don't have store yet",
+                    Data = store
+                });
+            }
+
+
+        }
+
     }
 }

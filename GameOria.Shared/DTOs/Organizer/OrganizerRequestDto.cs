@@ -8,12 +8,9 @@ namespace GameOria.Shared.DTOs.Organizer
 {
     public class OrganizerRequestDto
     {
-        public Guid UserId { get; set; }
         public string StoreName { get; set; }
-        public string? BusinessEmail { get; set; }
         public string IdentityNumber { get; set; }
-        public string? PhoneNumber { get; set; }
-        public bool IsApproved { get; set; } = false;
+        public string Email { get; set; }
         public DateTime RequestDate { get; set; } = DateTime.UtcNow;
     }
 

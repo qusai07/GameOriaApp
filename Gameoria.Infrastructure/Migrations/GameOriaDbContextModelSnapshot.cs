@@ -869,10 +869,6 @@ namespace GameOria.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("AllowDigitalProducts")
                         .HasColumnType("bit");
 
@@ -881,6 +877,18 @@ namespace GameOria.Infrastructure.Migrations
 
                     b.Property<decimal>("AverageRating")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankRoutingNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("CommissionRate")
                         .HasColumnType("decimal(18,2)");
@@ -906,6 +914,9 @@ namespace GameOria.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasAcceptedTerms")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -930,126 +941,38 @@ namespace GameOria.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<DateTime>("OwnerDateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OwnerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerFirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerLastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StoreOwnerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ShortcutWebsite")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupportedCurrencies")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalReviews")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalSales")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Website")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Stores");
-                });
-
-            modelBuilder.Entity("GameOria.Domains.Entities.Stores.StoreOwner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankAccountNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankRoutingNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyRegistrationNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("HasAcceptedTerms")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SwiftCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaxIdentificationNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1058,6 +981,12 @@ namespace GameOria.Infrastructure.Migrations
 
                     b.Property<string>("TermsAcceptanceIp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalReviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalSales")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -1070,10 +999,10 @@ namespace GameOria.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("StoreOwners");
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("GameOria.Domains.Entities.Stores.StoreReview", b =>
@@ -1458,17 +1387,6 @@ namespace GameOria.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameOria.Domains.Entities.Stores.StoreOwner", b =>
-                {
-                    b.HasOne("GameOria.Domains.Entities.Stores.Store", "Store")
-                        .WithOne("StoreOwner")
-                        .HasForeignKey("GameOria.Domains.Entities.Stores.StoreOwner", "StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("GameOria.Domains.Entities.Stores.StoreReview", b =>
                 {
                     b.HasOne("GameOria.Domains.Entities.Stores.Store", "Store")
@@ -1536,9 +1454,6 @@ namespace GameOria.Infrastructure.Migrations
                     b.Navigation("Games");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("StoreOwner")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

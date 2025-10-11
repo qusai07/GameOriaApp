@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameOria.Application.Orders.Service
 {
+    //Projection 
     public class OrderRepository : IOrderRepository
     {
         private readonly IDataService _dataService;
@@ -21,46 +22,49 @@ namespace GameOria.Application.Orders.Service
 
         public async Task<OrderDto?> GetByIdAsync(Guid id, bool includeDetails = true)
         {
-            var query = _dataService.Query<Order>().Where(o => o.Id == id);
+            return await _dataService.GetByIdAsync<OrderDto>(id);
 
-            if (includeDetails)
-            {
-                query = query.Include(o => o.Items)
-                             .Include(o => o.Codes);
-            }
+            //var query = _dataService.Query<Order>().Where(o => o.Id == id);
 
-            return await query.Select(o => new OrderDto
-            {
-                Id = o.Id,
-                OrderNumber = o.OrderNumber,
-                UserId = o.UserId,
-                TotalAmount = new MoneyDto
-                {
-                    Amount = o.TotalAmount.Amount,
-                    Currency = o.TotalAmount.Currency
-                },
-                Status = o.Status,
-                PaymentStatus = o.PaymentStatus,
-                Items = includeDetails ? o.Items.Select(i => new OrderItemDto
-                {
-                    ProductName = i.ProductName,
-                    Quantity = i.Quantity,
-                    UnitPrice = new MoneyDto
-                    {
-                        Amount = i.UnitPrice.Amount,
-                        Currency = i.UnitPrice.Currency
-                    }
-                }).ToList() : null,
-                Codes = includeDetails ? o.Codes.Select(c => new OrderCodeDto
-                {
-                    Code = c.Code,
-                    ProductType = c.ProductType
-                }).ToList() : null
-            }).FirstOrDefaultAsync();
+            //if (includeDetails)
+            //{
+            //    query = query.Include(o => o.Items)
+            //                 .Include(o => o.Codes);
+            //}
+
+            //return await query.Select(o => new OrderDto
+            //{
+            //    Id = o.Id,
+            //    OrderNumber = o.OrderNumber,
+            //    UserId = o.UserId,
+            //    TotalAmount = new MoneyDto
+            //    {
+            //        Amount = o.TotalAmount.Amount,
+            //        Currency = o.TotalAmount.Currency
+            //    },
+            //    Status = o.Status,
+            //    PaymentStatus = o.PaymentStatus,
+            //    Items = includeDetails ? o.Items.Select(i => new OrderItemDto
+            //    {
+            //        ProductName = i.ProductName,
+            //        Quantity = i.Quantity,
+            //        UnitPrice = new MoneyDto
+            //        {
+            //            Amount = i.UnitPrice.Amount,
+            //            Currency = i.UnitPrice.Currency
+            //        }
+            //    }).ToList() : null,
+            //    Codes = includeDetails ? o.Codes.Select(c => new OrderCodeDto
+            //    {
+            //        Code = c.Code,
+            //        ProductType = c.ProductType
+            //    }).ToList() : null
+            //}).FirstOrDefaultAsync();
         }
 
         public async Task<List<OrderDto>> GetAllAsync(bool includeDetails = false)
         {
+
             var query = _dataService.Query<Order>();
 
             if (includeDetails)

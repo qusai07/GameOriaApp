@@ -14,10 +14,6 @@ namespace GameOria.Infrastructure.Persistence.Configurations
             builder.Property(s => s.Name).IsRequired().HasMaxLength(200);
             builder.HasIndex(s => s.Name).IsUnique();
 
-            builder.HasOne(s => s.StoreOwner)
-                   .WithOne(so => so.Store)
-                   .HasForeignKey<StoreOwner>(so => so.StoreId);
-
             builder.HasMany(s => s.Games)
                    .WithOne(g => g.Store)
                    .HasForeignKey(g => g.StoreId)
