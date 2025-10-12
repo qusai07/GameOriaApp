@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using GameOria.Shared.Response;
+using GameOria.Infrastructure.Helper.Service;
 
 namespace GameOria.Api.Controllers
 {
@@ -208,7 +209,7 @@ namespace GameOria.Api.Controllers
                 var token = _jwtHelper.GenerateToken(user);
                 return Ok(new APIResponse{
                 Data = token + " " + user.Role,
-                Success = true
+                    Success = true
                 });
             }
             catch (Exception ex)

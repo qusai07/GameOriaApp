@@ -1,9 +1,9 @@
-﻿using GameOria.Api.Helper.Service;
-using GameOria.Api.Repo.Interface;
+﻿using GameOria.Api.Repo.Interface;
 using GameOria.Application.Interface;
 using GameOria.Domains.Entities.Identity;
 using GameOria.Domains.Entities.Users;
 using GameOria.Domains.Enums;
+using GameOria.Infrastructure.Helper.Service;
 using GameOria.Shared.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

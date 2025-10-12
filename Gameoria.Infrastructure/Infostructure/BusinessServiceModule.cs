@@ -6,7 +6,7 @@ using GameOria.Application.Orders.Service;
 using GameOria.Application.Stores.Service;
 using GameOria.Domains.Entities.Identity;
 using GameOria.Infrastructure.Data;
-using GameOria.Infrastructure.Helper.Model;
+using GameOria.Infrastructure.Helper.Service;
 using GameOria.Infrastructure.Implementations;
 using GameOria.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -34,8 +34,6 @@ namespace GameOria.Infrastructure.Infastructure
 
             Services.AddScoped<IStoreReviewRepository, StoreReviewRepository>();
             Services.AddScoped<IStoreRepository, StoreRepository>();
-
-
 
         }
     }

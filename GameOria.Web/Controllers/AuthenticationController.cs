@@ -74,11 +74,20 @@ namespace GameOria.Web.Controllers
 
                 if (!string.IsNullOrEmpty(token))
                 {
-                HttpContext.Session.SetString("AuthToken", token); 
-                HttpContext.Session.SetString("UserRole", role);
+                    //  JWT  HttpOnly Cookie
+                    Response.Cookies.Append("AuthToken", token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true, //  HTTPS
+                        SameSite = SameSiteMode.Strict, //  CSRF
+                        Expires = DateTimeOffset.Now.AddMinutes(60)
+                    });
 
+                    // In Session
+                    HttpContext.Session.SetString("UserRole", role);
                 }
-                 
+
+
 
                 switch (role.ToLower())
                 {
@@ -185,6 +194,7 @@ namespace GameOria.Web.Controllers
                     Response.Cookies.Delete("token");
                 }
                 HttpContext.Session.Clear();
+                Response.Cookies.Delete("AuthToken");
 
                 return Ok("LoggedOutSuccessfully");
             }

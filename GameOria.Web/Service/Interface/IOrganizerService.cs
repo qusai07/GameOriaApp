@@ -1,4 +1,5 @@
-﻿using GameOria.Shared.DTOs.Organizer;
+﻿using GameOria.Application.Stores.DTOs;
+using GameOria.Shared.DTOs.Organizer;
 
 namespace GameOria.Web.Service.Interface
 {
@@ -6,6 +7,6 @@ namespace GameOria.Web.Service.Interface
     {
         Task <HttpResponseMessage>  RequestBecomeOrganizer(OrganizerRequestDto organizerRequestDto);
         Task<HttpResponseMessage> GetMyStatusRequest();
-        Task<HttpResponseMessage> GetMyStore();
+        Task<StorOrganizerDto?> GetMyStoreAsync();
     }
 }

@@ -1,10 +1,8 @@
 ﻿using GameOria.Api.Repo.Interface;
 using GameOria.Domains.Entities.Stores;
 using GameOria.Domains.Entities.Users;
-using GameOria.Infrastructure.Data;
 using GameOria.Shared.DTOs.Organizer;
 using GameOria.Shared.Response;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +13,9 @@ namespace GameOria.Api.Controllers
     [ApiController]
     public class OrganizerAPIController : BaseController
     {
-        private readonly GameOriaDbContext _context;
 
-        public OrganizerAPIController(IDataService dataService ,GameOriaDbContext context) : base(dataService)
+        public OrganizerAPIController(IDataService dataService) : base(dataService)
         {
-            _context = context;
         }
         [HttpPost("Become-organizer-requests")]
         public async Task<IActionResult> BecomeOrganizerRequest([FromBody] OrganizerRequestDto organizerRequestDto)
@@ -124,7 +120,7 @@ namespace GameOria.Api.Controllers
                 return Ok(new APIResponse
                 {
                     Success = false,
-                    Message = "You don't have store yet",
+                    Message = "Store found",
                     Data = store
                 });
             }

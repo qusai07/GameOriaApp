@@ -1,6 +1,9 @@
-﻿using GameOria.Shared.DTOs.Organizer;
+﻿using GameOria.Application.Stores.DTOs;
+using GameOria.Shared.DTOs.Organizer;
+using GameOria.Shared.Response;
 using GameOria.Web.Service.Interface;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace GameOria.Web.Service.Implementation
 {
@@ -20,9 +23,21 @@ namespace GameOria.Web.Service.Implementation
         {
             return await _httpClient.GetAsync("Get-My-Status-Request");
         }
-        public async Task<HttpResponseMessage> GetMyStore()
+        public async Task<StorOrganizerDto?> GetMyStoreAsync()
         {
-            return await _httpClient.GetAsync("Get-Store-Owner-By-Id");
+            var response = await _httpClient.GetAsync("Get-My-Store");
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var apiResponse = await response.Content.ReadFromJsonAsync<APIResponse>();
+
+            if (apiResponse == null || !apiResponse.Success || apiResponse.Data == null)
+                return null;
+
+            return JsonSerializer.Deserialize<StorOrganizerDto>(apiResponse.Data.ToString());
         }
+
+
     }
 }

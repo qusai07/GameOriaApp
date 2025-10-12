@@ -2,13 +2,12 @@
 using GameOria.Api.Repo.Interface;
 using GameOria.Domains.Entities.Identity;
 using GameOria.Domains.Enums;
-using GameOria.Infrastructure.Helper.Model;
+using GameOria.Infrastructure.Helper.Service;
 using GameOria.Shared.Response;
 using GameOria.Shared.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Web;
 
 namespace GameOria.Api.Controllers
 {

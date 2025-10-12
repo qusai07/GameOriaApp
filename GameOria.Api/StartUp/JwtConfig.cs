@@ -9,9 +9,8 @@ namespace GameOria.Api.StartUp
     {
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>();
 
-            services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+            var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
             services.AddAuthentication(options =>
             {
@@ -31,7 +30,21 @@ namespace GameOria.Api.StartUp
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
                     ClockSkew = TimeSpan.Zero
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("AuthToken"))
+                        {
+                            context.Token = context.Request.Cookies["AuthToken"];
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+
         }
     }
 }
